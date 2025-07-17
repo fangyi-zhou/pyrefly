@@ -151,7 +151,7 @@ x5: MutableSet[int] = {'oops'}  # E: `set[str]` is not assignable to `MutableSet
 x6: Iterable[int] = {1}
 x7: object = {1}
 x8: list[int] = {1}  # E: `set[int]` is not assignable to `list[int]`
-    "#,
+"#,
 );
 
 testcase!(
@@ -167,7 +167,7 @@ x6: Iterable[int] = {"oops": 1}  # E: `dict[str, int]` is not assignable to `Ite
 x7: Iterable[Literal[4]] = {4: "a"}
 x8: object = {"a": 1}
 x9: list[str] = {"a": 1}  # E: `dict[str, int]` is not assignable to `list[str]`
-    "#,
+"#,
 );
 
 testcase!(
@@ -178,7 +178,7 @@ def f(cb: Callable[[int], int]) -> None: ...
 def g(cb: Any) -> None: ...
 f(cb = lambda x: assert_type(x, int), cb = lambda x: assert_type(x, int))  # E: Multiple values for argument `cb` # E: Parse error
 g(cb = lambda x: assert_type(x, Any), cb = lambda x: assert_type(x, Any))  # E: Multiple values for argument `cb` # E: Parse error
-    "#,
+"#,
 );
 
 testcase!(
@@ -358,7 +358,7 @@ class B(A): ...
 x: list[A]
 y: list[B]
 x = y = [B()]  # E: Wrong type for assignment, expected `list[A]` and got `list[B]`
-    "#,
+"#,
 );
 
 testcase!(
@@ -371,7 +371,7 @@ class B(A): ...
 
 xs: list[A] = (ys := [B()]) # E: `list[B]` is not assignable to `list[A]`
 assert_type(ys, list[B])
-    "#,
+"#,
 );
 
 testcase!(
@@ -435,7 +435,7 @@ class B(A):
         return self.CONST
 class C(B):
     CONST = ["hello world"]
-    "#,
+"#,
 );
 
 testcase!(
@@ -451,5 +451,5 @@ class B(A):
 class C(B):
     def __init__(self):
         self.x = ["hello world"]
-    "#,
+"#,
 );

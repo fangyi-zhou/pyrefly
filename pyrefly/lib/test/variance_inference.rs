@@ -15,7 +15,7 @@ from typing import Sequence, reveal_type
 def id[T](x: Sequence[T]) -> Sequence[T]:
     return x
 def test(x: Sequence[int] | Sequence[str]):
-    reveal_type(id(x))  # E: revealed type: Sequence[int] | int # E: Argument `Sequence[int] | Sequence[str]` is not assignable to parameter `x` 
+    reveal_type(id(x))  # E: revealed type: Sequence[int] | int # E: Argument `Sequence[int] | Sequence[str]` is not assignable to parameter `x`
 "#,
 );
 
@@ -45,10 +45,10 @@ class ClassA[T1, T2, T3](list[T1]):
 
 def func_a(p1: ClassA[float, int, int], p2: ClassA[int, float, float]):
     v1: ClassA[int, int, int] = p1  # E:
-    v2: ClassA[float, float, int] = p1 # E: 
+    v2: ClassA[float, float, int] = p1 # E:
     v3: ClassA[float, int, float] = p1
 
-    v4: ClassA[int, int, int] = p2 # E: 
+    v4: ClassA[int, int, int] = p2 # E:
     v5: ClassA[int, int, float] = p2
 "#,
 );
@@ -112,7 +112,7 @@ class ShouldBeCovariant3[U]:
         ...
 
 vco3_1: ShouldBeCovariant3[float] = ShouldBeCovariant3[int]()  # OK
-vco3_2: ShouldBeCovariant3[int] = ShouldBeCovariant3[float]()  # E: 
+vco3_2: ShouldBeCovariant3[int] = ShouldBeCovariant3[float]()  # E:
 
 "#,
 );

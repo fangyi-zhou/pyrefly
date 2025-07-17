@@ -11,7 +11,7 @@ testcase!(
     test_override_any,
     r#"
 from typing import override, Any
- 
+
 class ParentB(Any):
     pass
 
@@ -19,22 +19,22 @@ class ParentB(Any):
 class ChildB(ParentB):
     @override
     def method1(self) -> None:
-        pass        
- "#,
+        pass
+"#,
 );
 
 testcase!(
     test_override_basic_method,
     r#"
- 
+
 class A:
     def f(self, x:str, y:str) -> str:
         return x + y
 
 class B(A):
     def f(self, x:int, y:int) -> int: # E: Class member `B.f` overrides parent class `A` in an inconsistent manner
-        return x + y        
- "#,
+        return x + y
+"#,
 );
 
 testcase!(
@@ -51,7 +51,7 @@ class B(A):
 class C(B):
     x: int
     y: str # E: Class member `C.y` overrides parent class `B` in an inconsistent manner
- "#,
+"#,
 );
 
 testcase!(
@@ -68,7 +68,7 @@ class D(B):
     x: ClassVar[int] = 1  # OK
 class E(B):
     x: int = 1  # E: Instance variable `E.x` overrides ClassVar of the same name in parent class `B`
- "#,
+"#,
 );
 
 testcase!(
@@ -81,7 +81,7 @@ class A:
 class B(A):
     x = 1  # E: `x` is declared as final in parent class `A`
     y = 1  # E: `y` is declared as final in parent class `A`
- "#,
+"#,
 );
 
 testcase!(
@@ -115,7 +115,7 @@ class B(A):
 
     def method(self, x: int | str) -> int | str:
         return 0
- "#,
+"#,
 );
 
 testcase!(
@@ -132,7 +132,7 @@ class B(A):
     @override
     def method2(self) -> int: # E: Class member `B.method2` is marked as an override, but no parent class has a matching attribute
         return 1
- "#,
+"#,
 );
 
 testcase!(
@@ -144,7 +144,7 @@ class A:
 class B(A):
     def __init__(self) -> None:
         self.x = 0
- "#,
+"#,
 );
 
 testcase!(
@@ -156,7 +156,7 @@ class A:
 class B(A):
     def __init__(self) -> None:
         self.x = 0 # E: `Literal[0]` is not assignable to attribute `x` with type `str`
- "#,
+"#,
 );
 
 testcase!(
@@ -182,8 +182,8 @@ class ChildA(ParentA):
     @override
     def property1(self) -> int: # E: Class member `ChildA.property1` is marked as an override, but no parent class has a matching attribute
         return 1
-    
- "#,
+
+"#,
 );
 
 testcase!(
@@ -199,8 +199,8 @@ class ChildA(ParentA):
     @staticmethod
     def static_method1() -> int: # E: Class member `ChildA.static_method1` is marked as an override, but no parent class has a matching attribute
         return 1
-    
- "#,
+
+"#,
 );
 
 testcase!(
@@ -226,9 +226,9 @@ class ChildA(ParentA):
     @wrapper
     @override
     @staticmethod
-    def static_method1() -> bool: 
+    def static_method1() -> bool:
         return True
- "#,
+"#,
 );
 
 testcase!(
@@ -248,8 +248,8 @@ class ChildA(ParentA):
     @override
     @staticmethod
     def static_method1() -> int:
-        return 1    
- "#,
+        return 1
+"#,
 );
 
 testcase!(
@@ -272,9 +272,9 @@ class ChildA(ParentA):
         ...
 
     @override
-    def method4(self, x: int | str) -> int | str: 
+    def method4(self, x: int | str) -> int | str:
         return 0
- "#,
+"#,
 );
 
 testcase!(
@@ -288,7 +288,7 @@ class Parent:
 
 class Child(Parent):
     def a(self): ...  # E: `a` is declared as final in parent class `Parent`
- "#,
+"#,
 );
 
 testcase!(
@@ -299,7 +299,7 @@ class A:
     X: Literal[0] = 0
 class B(A):
     X = 0
-    "#,
+"#,
 );
 
 testcase!(
@@ -310,7 +310,7 @@ class A:
     x: Literal[0] = 0
 class B(A):
     x = 1 # E: `Literal[1]` is not assignable to attribute `x` with type `Literal[0]`
-    "#,
+"#,
 );
 
 testcase!(
@@ -329,7 +329,7 @@ class Child(Parent):
     @contextlib.asynccontextmanager
     async def run(self):
         yield
-    "#,
+"#,
 );
 
 testcase!(
@@ -349,7 +349,7 @@ class B(A):
     def test2(self, *args: int, **kwargs: int): ...
     def test3(self, *args: int, **kwargs: int): ...
     def test4(self, *args: int, **kwargs: int): ...
-    "#,
+"#,
 );
 
 testcase!(
@@ -369,7 +369,7 @@ class B(A):
     def test2(self, *args, **kwargs): ...
     def test3(self, *args, **kwargs): ...
     def test4(self, *args, **kwargs): ...
-    "#,
+"#,
 );
 
 testcase!(
@@ -390,5 +390,5 @@ class B(A):
     # If A.test3 passes x positionally then it will crash
     def test3(self, *args: int, x: int): ...  # E: Class member `B.test3` overrides parent class `A` in an inconsistent manner
     def test4(self, *args: int, x: int = 1): ...
-    "#,
+"#,
 );

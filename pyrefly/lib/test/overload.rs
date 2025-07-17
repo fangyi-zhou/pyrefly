@@ -26,7 +26,7 @@ assert_type(f(1), int)
 
 def anywhere():
     assert_type(f(1), int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -45,7 +45,7 @@ def test(x: bool):
             return x
     def g(x: str):
         assert_type(f(x), bytes | str)
-    "#,
+"#,
 );
 
 fn env_with_stub() -> TestEnv {
@@ -61,7 +61,7 @@ def f(x: int) -> int: ...
 
 @overload
 def f(x: str) -> str: ...
-    "#,
+"#,
     );
     t
 }
@@ -73,7 +73,7 @@ testcase!(
 from typing import assert_type
 import foo
 assert_type(foo.f(1), int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -89,7 +89,7 @@ class P(Protocol):
 
 def test(o: P):
     assert_type(o.m(1), int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -107,7 +107,7 @@ class C:
 
 def test(o: C):
     assert_type(o.m(1), int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -238,7 +238,7 @@ def g(meow: Mammal, chirp: Bird):
         assert_type(meow, Cat)
     if A().f(chirp):
         assert_type(chirp, Robin)
-    "#,
+"#,
 );
 
 testcase!(
@@ -259,7 +259,7 @@ class A:
         return x
 
 assert_type(A().f(1), int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -279,7 +279,7 @@ def f(x: int) -> int: ...  # E: `f` has type `float` after decorator application
 
 def f(x: str | int) -> str | int:
     return x
-    "#,
+"#,
 );
 
 testcase!(
@@ -302,7 +302,7 @@ def f(x: object) -> object:
 
 assert_type(f(0), int)
 f(b"")  # E: No matching overload found for function `f`
-    "#,
+"#,
 );
 
 testcase!(
@@ -321,7 +321,7 @@ def f(x: int | str) -> int | str:
     return x
 
 assert_type(f(0), int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -330,7 +330,7 @@ testcase!(
 from collections import defaultdict
 from typing import DefaultDict
 x: DefaultDict[int, list[int]] = defaultdict(list)
-    "#,
+"#,
 );
 
 testcase!(
@@ -338,7 +338,7 @@ testcase!(
     r#"
 from collections import defaultdict
 x: dict[int, int] = defaultdict(int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -349,7 +349,7 @@ std_aggs: dict[int, tuple[list[str], list[str]]] = collections.defaultdict(
     lambda: ([], [])
 )
 std_aggs[0][1].append('foo')
-    "#,
+"#,
 );
 
 testcase!(
@@ -364,7 +364,7 @@ class defaulty[K, V]:
     def __init__() -> None:
         return None
 badge: defaulty[bool, list[str]] = defaulty(list)
-    "#,
+"#,
 );
 
 testcase!(
@@ -384,7 +384,7 @@ class C[T](Iterable[T]):
 
 def g(x: int):
     f(C(x))
-    "#,
+"#,
 );
 
 testcase!(
@@ -420,7 +420,7 @@ def f(x: str) -> str: ...
 @overload
 def f(x: int | str) -> int | str: # E: @overload decorator should not be used on function implementation
     return x
-    "#,
+"#,
 );
 
 testcase!(
@@ -436,7 +436,7 @@ def f(x: int) -> int: ...
 
 @overload
 def f(x: str) -> str: ...
-    "#,
+"#,
 );
 
 testcase!(
@@ -445,13 +445,13 @@ testcase!(
 from typing import overload, Any
 
 @overload
-def foo(a: int) -> int: ...  
+def foo(a: int) -> int: ...
 @overload
 def foo(a: str) -> str:
     """Docstring"""
 def foo(*args, **kwargs) -> Any:
     pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -460,14 +460,14 @@ testcase!(
 from typing import overload, Any
 
 @overload
-def foo(a: int) -> int: ...  
+def foo(a: int) -> int: ...
 @overload
-def foo(a: str) -> str: 
+def foo(a: str) -> str:
     """Docstring"""
     return 123             # E: Returned type `Literal[123]` is not assignable to declared return type `str`
 def foo(*args, **kwargs) -> Any:
     pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -475,5 +475,5 @@ testcase!(
     r#"
 def foo() -> int: # E: Function declared to return `int` but is missing an explicit `return`
     """hello"""
-    "#,
+"#,
 );

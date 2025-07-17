@@ -151,5 +151,5 @@ def f(m: Meta):
     pass
 f(C1)
 f(C2[int])
-    "#,
+"#,
 );

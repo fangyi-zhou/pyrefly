@@ -48,7 +48,7 @@ class C[T]: ...
 assert_type(A.__new__(A), A)
 assert_type(A.__new__(B[int]), B[int])
 assert_type(A.__new__(C[int]), Self)
-    "#,
+"#,
 );
 
 testcase!(
@@ -58,7 +58,7 @@ from warnings import deprecated
 @deprecated("function is deprecated")
 def old_function() -> None: ...
 old_function()  # E: Call to deprecated function `old_function`
-    "#,
+"#,
 );
 
 testcase!(
@@ -66,5 +66,5 @@ testcase!(
     r#"
 from functools import reduce
 reduce(max, [1,2])
-    "#,
+"#,
 );

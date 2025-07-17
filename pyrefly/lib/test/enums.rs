@@ -21,7 +21,7 @@ import enum
 class E(enum.Enum):
     X = 1
     Y = 2
-        "#,
+"#,
     );
     let cls = get_class("E", &handle, &state);
     let fields = cls
@@ -122,7 +122,7 @@ class E(Enum):
     Y = 2
 for e in E:  # E: Type `type[E]` is not iterable
     assert_type(e, E)  # E: assert_type(Any, E)
-    "#,
+"#,
 );
 
 testcase!(
@@ -219,7 +219,7 @@ class E(Enum):
     Y = 2
 def f(e: Literal[E.X, E.Y]) -> int:
     return e.value
-    "#,
+"#,
 );
 
 testcase!(
@@ -242,7 +242,7 @@ def f(test: bool):
     # this doesn't simplify because not all members are included
     e2 = E2.X if test else E2.Y
     assert_type(e2, Literal[E2.X, E2.Y])
-    "#,
+"#,
 );
 
 testcase!(
@@ -261,7 +261,7 @@ def f(test: bool, e1: E1, e2: E2):
     x: Literal[E1.X, E1.Y] = e1
     y: Literal[E1.X, E1.Y, 1] = e1
     z: Literal[E2.X, E2.Y] = e2  # E: `E2` is not assignable to `Literal[E2.X, E2.Y]`
-    "#,
+"#,
 );
 
 testcase!(
@@ -304,7 +304,7 @@ class E[T](Enum):  # E: Enums may not be generic
     X = 1
 # Even though a generic enum is an error, we still want to handle it gracefully.
 assert_type(E.X, Literal[E.X])
-    "#,
+"#,
 );
 
 testcase!(
@@ -333,7 +333,7 @@ class E(Enum):
 # Even though a generic enum is an error, we still want to handle it gracefully.
 assert_type(E.X._name_, Literal["X"])
 assert_type(E.X.name, Literal["X"])
-    "#,
+"#,
 );
 
 testcase!(
@@ -371,7 +371,7 @@ class E(enum.Enum):
     def foo(self) -> str: ...
 e = E.E0
 assert_type(e.foo, str)
-    "#,
+"#,
 );
 
 testcase!(
@@ -389,7 +389,7 @@ class E(enum.Enum):
     def foo(self) -> str: ...
 e = E.E0
 reveal_type(e.foo)  # E: revealed type: property
-    "#,
+"#,
 );
 
 testcase!(
@@ -408,7 +408,7 @@ class A(enum.IntEnum):
         return member
 
 assert_type(A.B, Literal[A.B])
-    "#,
+"#,
 );
 
 // This used to trigger a false positive where we thought the metaclass inheriting
@@ -421,7 +421,7 @@ class CustomMetaclass(Any):
     pass
 class C[T](metaclass=CustomMetaclass):  # Ok - was a false positive
     x: T
-    "#,
+"#,
 );
 
 fn env_enum_dots() -> TestEnv {

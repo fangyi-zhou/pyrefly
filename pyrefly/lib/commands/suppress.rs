@@ -388,7 +388,7 @@ def foo() -> None:
             param
         ]
     unrelated_line = 0
-        "#,
+"#,
             r#"
 def foo() -> None:
     line_break = \\
@@ -396,7 +396,7 @@ def foo() -> None:
             param
         ]
     unrelated_line = 0
-        "#,
+"#,
         );
     }
 
@@ -408,7 +408,7 @@ def foo() -> None:
 
 def bar() -> None: 
 pass 
-    "#,
+"#,
         );
         assert_no_error_suppression(
             vec![(1, 10, ErrorKind::BadAssignment)],

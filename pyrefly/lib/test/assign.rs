@@ -137,7 +137,7 @@ testcase!(
 from typing import Optional
 x: Optional[int] = 42
 y: Optional[str] = 43  # E: `Literal[43]` is not assignable to `str | None`
-    "#,
+"#,
 );
 
 testcase!(
@@ -160,7 +160,7 @@ from typing import assert_type, Literal
 a, b = (1, "test")
 assert_type(a, Literal[1])
 assert_type(b, Literal["test"])
-    "#,
+"#,
 );
 
 testcase!(
@@ -172,7 +172,7 @@ assert_type(a, Literal[1])
 assert_type(b, Literal["test"])
 assert_type(c, Literal[2])
 assert_type(d, Literal[3])
-    "#,
+"#,
 );
 
 testcase!(
@@ -183,7 +183,7 @@ def f(x: list[str]):
     a, b = x
     assert_type(a, str)
     assert_type(b, str)
-    "#,
+"#,
 );
 
 testcase!(
@@ -193,7 +193,7 @@ from typing import assert_type, Literal
 a = b = 1
 assert_type(a, Literal[1])
 assert_type(b, Literal[1])
-    "#,
+"#,
 );
 
 testcase!(
@@ -203,14 +203,14 @@ from typing import assert_type, Literal
 [a, b] = (1, "test")
 assert_type(a, Literal[1])
 assert_type(b, Literal["test"])
-    "#,
+"#,
 );
 
 testcase!(
     test_unpack_too_many,
     r#"
 (a, b, c, d) = (1, 2)  # E: Cannot unpack tuple[Literal[1], Literal[2]] (of size 2) into 4 values
-    "#,
+"#,
 );
 
 testcase!(
@@ -218,7 +218,7 @@ testcase!(
     r#"
 (a,) = (1, 2)  # E: Cannot unpack tuple[Literal[1], Literal[2]] (of size 2) into 1 value
 () = (1, 2)  # E: Cannot unpack tuple[Literal[1], Literal[2]] (of size 2) into 0 values
-    "#,
+"#,
 );
 
 testcase!(
@@ -229,7 +229,7 @@ from typing import assert_type, Literal
 assert_type(a, Literal[1])
 assert_type(b, Literal[2])
 assert_type(c, list[Literal["test", 3]])
-    "#,
+"#,
 );
 
 testcase!(
@@ -240,7 +240,7 @@ from typing import assert_type, Literal
 assert_type(a, list[Literal[1, 2]])
 assert_type(b, Literal[3])
 assert_type(c, Literal["test"])
-    "#,
+"#,
 );
 
 testcase!(
@@ -251,7 +251,7 @@ from typing import assert_type, Literal
 assert_type(a, Literal[1])
 assert_type(b, list[Literal[True, 2]])
 assert_type(c, Literal["test"])
-    "#,
+"#,
 );
 
 testcase!(
@@ -261,7 +261,7 @@ from typing import assert_type, Literal
 (a, *(b,)) = (1, 2)
 assert_type(a, Literal[1])
 assert_type(b, Literal[2])
-    "#,
+"#,
 );
 
 testcase!(
@@ -270,7 +270,7 @@ testcase!(
 from typing import assert_type, Never
 (*a,) = ()
 assert_type(a, list[Never])
-    "#,
+"#,
 );
 
 testcase!(
@@ -283,7 +283,7 @@ def foo(x: Never) -> Any:
     return x
 def bar(x: Never) -> NoReturn:
     return x
-    "#,
+"#,
 );
 
 testcase!(
@@ -294,7 +294,7 @@ def f(x: list[str]):
     a, *b = x
     assert_type(a, str)
     assert_type(b, list[str])
-    "#,
+"#,
 );
 
 testcase!(
@@ -302,7 +302,7 @@ testcase!(
     r#"
 a, *b = (1,)  # OK
 a, *b = ()  # E: Cannot unpack tuple[()] (of size 0) into 1+ values
-    "#,
+"#,
 );
 
 testcase!(
@@ -319,7 +319,7 @@ def f(cond: bool):
     z: int = 0
     if cond:
         z: Literal[1] = 1  # E: `z` cannot be annotated with `Literal[1]`, it is already defined with type `int`
-    "#,
+"#,
 );
 
 testcase!(
@@ -327,7 +327,7 @@ testcase!(
     r#"
 x: int = 0
 x: str = ""  # E: `x` cannot be annotated with `str`, it is already defined with type `int`
-    "#,
+"#,
 );
 
 testcase!(
@@ -335,7 +335,7 @@ testcase!(
     r#"
 x = 0 # E: `Literal[0]` is not assignable to variable `x` with type `str`
 x: str = ""
-    "#,
+"#,
 );
 
 testcase!(
@@ -345,7 +345,7 @@ x = 42
 (x,) += (42,)  # E: Parse error: Invalid augmented assignment target
 [x] += [42]  # E: Parse error: Invalid augmented assignment target
 *x += 42  # E: Parse error: Invalid augmented assignment target
-    "#,
+"#,
 );
 
 testcase!(
@@ -358,7 +358,7 @@ x = 1
 lit1: Literal[1] = x
 x = "oops"  # E: `Literal['oops']` is not assignable to variable `x` with type `int`
 lit2: Literal["oops"] = x  # E: `int` is not assignable to `Literal['oops']`
-    "#,
+"#,
 );
 
 testcase!(
@@ -368,7 +368,7 @@ from typing import assert_type
 type X = int
 def f(x: X):
     assert_type(x, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -378,7 +378,7 @@ from typing import assert_type
 type X[T] = list[T]
 def f(x: X[int]):
     assert_type(x, list[int])
-    "#,
+"#,
 );
 
 testcase!(
@@ -388,7 +388,7 @@ from typing import Final
 x: Final   # E: Expected a type argument for `Final`
 y: Final[int]  # OK
 z: Final = 1  # OK
-    "#,
+"#,
 );
 
 testcase!(
@@ -404,7 +404,7 @@ class B:
     x: Final[int] = 1
 b = B()
 b.x += 1  # E: Cannot set field `x`
-    "#,
+"#,
 );
 
 testcase!(
@@ -412,7 +412,7 @@ testcase!(
     r#"
 def f(x: int):
     x += 1
-    "#,
+"#,
 );
 
 testcase!(
@@ -468,7 +468,7 @@ d = D()
 a += 1
 b += 1
 d += c
-    "#,
+"#,
 );
 
 testcase!(
@@ -585,7 +585,7 @@ testcase!(
 from typing import assert_type, Literal
 (x := True)
 assert_type(x, Literal[True])
-    "#,
+"#,
 );
 
 testcase!(
@@ -603,7 +603,7 @@ y2: A = (x2 := B())
 y3: list[A] = (x3 := [B()]) # E: `list[B]` is not assignable to `list[A]`
 
 y4: B = (x4 := A())  # E: `A` is not assignable to `B`
-    "#,
+"#,
 );
 
 testcase!(
@@ -621,7 +621,7 @@ x2: list[A]
 
 x3: B
 (x3 := A())  # E: `A` is not assignable to variable `x3` with type `B`
-    "#,
+"#,
 );
 
 testcase!(
@@ -630,7 +630,7 @@ testcase!(
     r#"
 x = y  # this should be an error
 y = 42
-    "#,
+"#,
 );
 
 testcase!(
@@ -640,7 +640,7 @@ class C:
     d: int
 def foo(c: C):
     (c.d := 1)  # E: Parse error: Assignment expression target must be an identifier
-    "#,
+"#,
 );
 
 testcase!(
@@ -650,7 +650,7 @@ from typing import assert_type
 list1 = [1, 2, 3]
 list2 = [elt for x in list1 if (elt := x)]
 assert_type(list2, list[int])
-    "#,
+"#,
 );
 
 testcase!(
@@ -668,7 +668,7 @@ def foo(c: C):
     # We expect type errors if the side-effect is a type error.
     [1 for c.d in ["1", "2", "3"]]  # E: `str` is not assignable to attribute `d` with type `int`
     [1 for c[0] in ["1", "2", "3"]]  # E: Argument `str` is not assignable to parameter `value` with type `int` in function `C.__setitem__`
-    "#,
+"#,
 );
 
 testcase!(
@@ -678,7 +678,7 @@ x: int
 y: str
 z: tuple[bool, ...]
 x, *z, y = True, 1, 2, "test" # E: list[Literal[1, 2]]` is not assignable to `tuple[bool, ...]
-    "#,
+"#,
 );
 
 testcase!(
@@ -742,7 +742,7 @@ testcase!(
 from typing import reveal_type
 x = oops # E: Could not find name `oops`
 reveal_type(x) # E: revealed type: Unknown
-    "#,
+"#,
 );
 
 testcase!(
@@ -757,8 +757,8 @@ def f(x):
 
 def f(x):
     x = 3
-    x = "None" 
-    "#,
+    x = "None"
+"#,
 );
 
 testcase!(
@@ -768,17 +768,17 @@ class A:
     _x: int
     def __init__(self, x:int):
         self._x: int = x
-    "#,
+"#,
 );
 
 testcase!(
     test_ann_assign_invalid,
     r#"
 class A:
-    _x: bool 
+    _x: bool
     def __init__(self, x:int):
         self._x: int = x # E: `int` is not assignable to attribute `_x` with type `bool`
-    "#,
+"#,
 );
 
 testcase!(
@@ -788,17 +788,17 @@ int2 = int
 class A:
     _x: int2
     def __init__(self, x:int):
-        self._x: int = x 
-    "#,
+        self._x: int = x
+"#,
 );
 
 testcase!(
     test_ann_assign_twice,
     r#"
 class A:
-    _x: bool 
+    _x: bool
     def __init__(self, x:int):
         self._x: int = x # E: `int` is not assignable to attribute `_x` with type `bool`
         self._x: bool = x # E: `int` is not assignable to attribute `_x` with type `bool`
-    "#,
+"#,
 );

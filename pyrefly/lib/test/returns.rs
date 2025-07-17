@@ -252,9 +252,9 @@ def f(b: bool) -> int:
 testcase!(
     test_return_error_on_docstring,
     r#"
-def f() -> int: # E: Function declared to return `int` but is missing an explicit `return` 
-    """ ... """ 
-     "#,
+def f() -> int: # E: Function declared to return `int` but is missing an explicit `return`
+    """ ... """
+"#,
 );
 
 testcase!(
@@ -268,7 +268,7 @@ async def async_f_inferred():
     return x
 assert_type(async_f_annotated, Callable[[], Coroutine[Any, Any, int]])
 assert_type(async_f_inferred, Callable[[], Coroutine[Any, Any, int]])
-     "#,
+"#,
 );
 
 testcase!(

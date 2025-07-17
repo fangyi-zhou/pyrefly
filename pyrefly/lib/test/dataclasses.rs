@@ -20,7 +20,7 @@ class Data:
     x: int
     y: str
 assert_type(Data, type[Data])
-    "#,
+"#,
 );
 
 testcase!(
@@ -35,7 +35,7 @@ class Data:
 def f(d: Data):
     assert_type(d.x, int)
     assert_type(d.y, str)
-    "#,
+"#,
 );
 
 testcase!(
@@ -51,7 +51,7 @@ def f(d: Data[int]):
 assert_type(Data(x=0), Data[int])
 Data[int](x=0)  # OK
 Data[int](x="")  # E: Argument `Literal['']` is not assignable to parameter `x` with type `int` in function `Data.__init__`
-    "#,
+"#,
 );
 
 testcase!(
@@ -64,7 +64,7 @@ class Data:
     y: str
 Data(0, "1")  # OK
 Data(0, 1)  # E: Argument `Literal[1]` is not assignable to parameter `y` with type `str`
-    "#,
+"#,
 );
 
 testcase!(
@@ -92,7 +92,7 @@ class D(C):
     z: float
 # Make sure we get the parameters in the right order when there are multiple @dataclass bases
 D(0, b"1", 2.0)
-    "#,
+"#,
 );
 
 testcase!(
@@ -105,7 +105,7 @@ class A:
     x: int
 
 print(dataclasses.asdict(A(x=3)))
-    "#,
+"#,
 );
 
 testcase!(
@@ -122,7 +122,7 @@ class B(A):
 # Overwriting x doesn't change the param order but does change its type
 B('0', 1.0)  # OK
 B(0, 1.0)  # E: Argument `Literal[0]` is not assignable to parameter `x` with type `str`
-    "#,
+"#,
 );
 
 testcase!(
@@ -144,7 +144,7 @@ C(y="0")  # First base (B) wins
 class D(B, A):
     z: float
 D(0, "1", 2.0)
-    "#,
+"#,
 );
 
 testcase!(
@@ -159,7 +159,7 @@ class B(A[int]):
     y: str
 B(x=0, y="1")  # OK
 B(x="0", y="1")  # E: Argument `Literal['0']` is not assignable to parameter `x` with type `int` in function `B.__init__`
-    "#,
+"#,
 );
 
 testcase!(
@@ -171,7 +171,7 @@ class C:
     x: int
 C(x=0)  # OK
 C(x='0')  # E: Argument `Literal['0']` is not assignable to parameter `x` with type `int` in function `C.__init__`
-    "#,
+"#,
 );
 
 testcase!(
@@ -185,7 +185,7 @@ class C:
         self.x = 42
 C()  # OK
 C(x=0)  # E: Unexpected keyword argument
-    "#,
+"#,
 );
 
 testcase!(
@@ -197,7 +197,7 @@ class C:
     x: int = 0
 C()  # OK
 C(x=0)  # E: Unexpected keyword argument
-    "#,
+"#,
 );
 
 testcase!(
@@ -214,7 +214,7 @@ assert_type(c.m(), int) # Ok
 a: Any = ...
 C(m=a)  # E: Unexpected keyword argument `m`
 assert_type(c.__match_args__, tuple[Literal['x']])  # Ok
-    "#,
+"#,
 );
 
 testcase!(
@@ -229,7 +229,7 @@ class C:
     x = dataclasses.field()
     # This is confusing and likely indicative of a programming error; consider erroring on this, too.
     y = 3
-    "#,
+"#,
 );
 
 testcase!(
@@ -247,7 +247,7 @@ class D:
 def f(c: C, d: D):
     c.x = 0
     d.x = 0  # E: Cannot set field `x`
-    "#,
+"#,
 );
 
 testcase!(
@@ -267,7 +267,7 @@ class C_no_match_args:
 assert_type(C_has_match_args_default.__match_args__, tuple[Literal['x']])
 assert_type(C_has_match_args_explicit.__match_args__, tuple[Literal['x']])
 C_no_match_args.__match_args__ # E: no class attribute `__match_args__`
-    "#,
+"#,
 );
 
 testcase!(
@@ -280,7 +280,7 @@ class C:
     __match_args__ = ()
     x: int
 assert_type(C.__match_args__, tuple[()])
-    "#,
+"#,
 );
 
 testcase!(
@@ -294,7 +294,7 @@ class C:
 C(x=0)  # OK
 C(0)  # E: Expected argument `x` to be passed by name
 assert_type(C.__match_args__, tuple[()])
-    "#,
+"#,
 );
 
 testcase!(
@@ -311,7 +311,7 @@ C(0, y="1")  # OK
 C(x=0, y="1")  # OK
 C(0, "1")  # E: Expected argument `y` to be passed by name
 assert_type(C.__match_args__, tuple[Literal["x"]])
-    "#,
+"#,
 );
 
 testcase!(
@@ -335,7 +335,7 @@ def f(d: D2, e: D2, f: D3):
     if d < e: ...  # OK
     if e < f: ...  # E: `<` is not supported between `D2` and `D3`\n  Argument `D3` is not assignable to parameter `other` with type `D2`
     if e != f: ...  # OK: `==` and `!=` never error regardless
-    "#,
+"#,
 );
 
 testcase!(
@@ -345,7 +345,7 @@ from dataclasses import dataclass
 @dataclass(order=True)
 class D: pass
 D.__lt__(self=D(), other=D())
-    "#,
+"#,
 );
 
 testcase!(
@@ -355,7 +355,7 @@ from dataclasses import dataclass
 @dataclass(flibbertigibbet=True)  # E: No matching overload found
 class C:
     pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -368,7 +368,7 @@ class C:
     y: str
 C(y="")  # OK
 C(x=0, y="")  # E: Unexpected keyword argument `x`
-    "#,
+"#,
 );
 
 testcase!(
@@ -378,7 +378,7 @@ from dataclasses import dataclass, field
 @dataclass(frozen=True)
 class C:
     x: list[str] = field(default_factory=list)
-    "#,
+"#,
 );
 
 testcase!(
@@ -390,7 +390,7 @@ class C:
     x: int = 0
 C()  # OK
 C(x=1)  # OK
-    "#,
+"#,
 );
 
 testcase!(
@@ -401,7 +401,7 @@ from dataclasses import dataclass, field
 class C:
     x: int = field()
 C()  # E: Missing argument `x`
-    "#,
+"#,
 );
 
 testcase!(
@@ -413,7 +413,7 @@ class C:
     x: int = field(kw_only=True)
 C(1)  # E: Expected argument `x` to be passed by name
 C(x=1)  # OK
-    "#,
+"#,
 );
 
 testcase!(
@@ -440,7 +440,7 @@ C2(x=1)  # OK
 class C3:
     x: int = field(default="oops")  # E: `str` is not assignable to `int`
     y: str = field(default_factory=factory)  # E: `int` is not assignable to `str`
-    "#,
+"#,
 );
 
 testcase!(
@@ -453,7 +453,7 @@ class C:
     x: ClassVar[int] = 0
 C()  # OK
 C(x=1)  # E: Unexpected keyword argument `x`
-    "#,
+"#,
 );
 
 testcase!(
@@ -469,7 +469,7 @@ class D(C):
     x = 0
 D()  # OK
 D(x=1)  # E: Unexpected keyword argument `x`
-    "#,
+"#,
 );
 
 testcase!(
@@ -511,7 +511,7 @@ f(D4())  # E: Argument `D4` is not assignable to parameter `x` with type `Hashab
 class D5(Unhashable):
     pass
 f(D5())  # OK
-    "#,
+"#,
 );
 
 testcase!(
@@ -533,7 +533,7 @@ class C(A, B, A):  # E: nonlinearizable inheritance chain
 
 def f(c: C):
     return c.x  # E: `C` has no attribute `x`
-    "#,
+"#,
 );
 
 testcase!(
@@ -544,7 +544,7 @@ from dataclasses import dataclass
 class A:
     x: int = int()
 A()  # OK
-    "#,
+"#,
 );
 
 testcase!(
@@ -560,7 +560,7 @@ class B:
 class C(B):
     def f(self, x: A) -> None:
         pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -583,7 +583,7 @@ class InitVarTest:
 # InitVar[str] should accept str arguments, not InitVar[str] arguments
 InitVarTest("number", 5)  # OK
 InitVarTest("text", 3)   # OK
-    "#,
+"#,
 );
 
 testcase!(
@@ -598,7 +598,7 @@ class C:
 @dataclass
 class D:
     y: InitVar[int]  # OK
-    "#,
+"#,
 );
 
 testcase!(
@@ -613,7 +613,7 @@ class FrozenBase:
 @dataclass
 class MutableChild(FrozenBase):  # E: Cannot inherit non-frozen dataclass `MutableChild` from frozen dataclass `FrozenBase`
     y: str
-    "#,
+"#,
 );
 
 testcase!(
@@ -628,7 +628,7 @@ class MutableBase:
 @dataclass(frozen=True)
 class FrozenChild(MutableBase):  # E: Cannot inherit frozen dataclass `FrozenChild` from non-frozen dataclass `MutableBase`
     y: str
-    "#,
+"#,
 );
 
 testcase!(
@@ -643,7 +643,7 @@ class FrozenBase:
 @dataclass(frozen=True)
 class FrozenChild(FrozenBase):  # OK
     y: str
-    "#,
+"#,
 );
 
 testcase!(
@@ -658,7 +658,7 @@ class MutableBase:
 @dataclass
 class MutableChild(MutableBase):  # OK
     y: str
-    "#,
+"#,
 );
 
 testcase!(
@@ -681,7 +681,7 @@ instance.mode  # E: Object of class `InitVarTest` has no attribute `mode`
 instance.count  # E: Object of class `InitVarTest` has no attribute `count`
 # Regular fields should be accessible
 instance.value  # OK
-    "#,
+"#,
 );
 
 testcase!(
@@ -695,7 +695,7 @@ class SomeClass:
 
 SomeClass(x=1) # OK
 SomeClass(1) # OK
-    "#,
+"#,
 );
 
 testcase!(
@@ -709,7 +709,7 @@ class SomeClass:
 
 SomeClass(x=1) # OK
 SomeClass(1) # OK
-    "#,
+"#,
 );
 
 testcase!(
@@ -735,7 +735,7 @@ froz1 = Froz1(x=0)
 froz1.x = 42  # E: frozen dataclass member
 froz2 = Froz2(x=0)
 froz2.x = 42  # E: frozen dataclass member
-    "#,
+"#,
 );
 
 fn dataclass_alias_env() -> TestEnv {
@@ -745,7 +745,7 @@ fn dataclass_alias_env() -> TestEnv {
 from dataclasses import dataclass
 mutable = dataclass
 frozen = dataclass(frozen=True)
-    "#,
+"#,
     )
 }
 
@@ -771,7 +771,7 @@ froz1 = Froz1(x=0)
 froz1.x = 42  # E: frozen dataclass member
 froz2 = Froz2(x=0)
 froz2.x = 42  # E: frozen dataclass member
-    "#,
+"#,
 );
 
 testcase!(
@@ -784,7 +784,7 @@ class C:
     y: str
     z: float
 C(1, "hello", 3.14)  # OK
-    "#,
+"#,
 );
 
 testcase!(
@@ -799,7 +799,7 @@ class C:
 C()  # OK
 C(x=2)  # OK
 C(x=2, y="world", z=2.71)  # OK
-    "#,
+"#,
 );
 
 testcase!(
@@ -813,7 +813,7 @@ class C:
     z: float = 3.14
 C(1, "hello")  # OK
 C(1, "hello", 2.71)  # OK
-    "#,
+"#,
 );
 
 testcase!(
@@ -830,7 +830,7 @@ class Magic:
 magic = Magic(foo=1)
 assert_type(magic.foo, int)
 assert_type(magic.bar, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -841,7 +841,7 @@ from dataclasses import dataclass
 class C:
     x: int = 1
     y: str  # E: Dataclass field `y` without a default may not follow dataclass field with a default
-    "#,
+"#,
 );
 
 testcase!(
@@ -854,7 +854,7 @@ class C:
     b: str  # E: Dataclass field `b` without a default may not follow dataclass field with a default
     c: int = 2
     d: float  # E: Dataclass field `d` without a default may not follow dataclass field with a default
-    "#,
+"#,
 );
 
 testcase!(
@@ -865,7 +865,7 @@ from dataclasses import dataclass, field
 class C:
     x: int = field(default=1)
     y: str  # E: Dataclass field `y` without a default may not follow dataclass field with a default
-    "#,
+"#,
 );
 
 testcase!(
@@ -878,7 +878,7 @@ class C:
     y: int = field()           # E: Dataclass field `y` without a default may not follow dataclass field with a default
     z: int                     # E: Dataclass field `z` without a default may not follow dataclass field with a default
 C(y=2, z=3)  # OK - y is not considered to have a default
-    "#,
+"#,
 );
 
 testcase!(
@@ -889,7 +889,7 @@ from dataclasses import dataclass, field
 class C:
     x: list[int] = field(default_factory=list)
     y: str  # E: Dataclass field `y` without a default may not follow dataclass field with a default
-    "#,
+"#,
 );
 
 testcase!(
@@ -902,7 +902,7 @@ class C:
     y: str = field(kw_only=True)  # OK - kw_only fields bypass ordering validation
     z: int = field(kw_only=True)  # OK - kw_only fields bypass ordering validation
 C(1, y="hello", z=2)  # OK
-    "#,
+"#,
 );
 
 testcase!(
@@ -916,7 +916,7 @@ class C:
     y: str  # OK - fields after KW_ONLY marker are keyword-only
     z: int  # OK - fields after KW_ONLY marker are keyword-only
 C(1, y="hello", z=2)  # OK
-    "#,
+"#,
 );
 
 testcase!(
@@ -928,7 +928,7 @@ class C:
     x: int = 1
     y: str  # OK - all fields are keyword-only when kw_only=True
 C(x=1, y="hello")  # OK
-    "#,
+"#,
 );
 
 testcase!(
@@ -940,7 +940,7 @@ class C:
     x: int = 1
     y: str = field(init=False)  # OK - init=False fields bypass ordering validation
     z: int  # E: Dataclass field `z` without a default may not follow dataclass field with a default
-    "#,
+"#,
 );
 
 testcase!(
@@ -954,7 +954,7 @@ class C:
     c: float = field(kw_only=True)  # OK - kw_only field
     d: int = field(init=False)      # OK - init=False field
     e: bool  # E: Dataclass field `e` without a default may not follow dataclass field with a default
-    "#,
+"#,
 );
 
 testcase!(
@@ -968,7 +968,7 @@ class Base:
 @dataclass
 class Child(Base):
     y: str  # E: Dataclass field `y` without a default may not follow dataclass field with a default
-    "#,
+"#,
 );
 
 testcase!(
@@ -983,7 +983,7 @@ class Base:
 class Child(Base):
     y: str = "default"  # OK
 Child(1, y="hello")  # OK
-    "#,
+"#,
 );
 
 testcase!(
@@ -1001,7 +1001,7 @@ class Base2:
 @dataclass
 class Child(Base1, Base2):
     z: float  # E: Dataclass field `z` without a default may not follow dataclass field with a default
-    "#,
+"#,
 );
 
 testcase!(
@@ -1020,7 +1020,7 @@ class B:
 class C(A, B):
     c: float = field(kw_only=True)  # OK - kw_only
     d: bool  # E: Dataclass field `d` without a default may not follow dataclass field with a default
-    "#,
+"#,
 );
 
 testcase!(
@@ -1032,7 +1032,7 @@ class C:
     x: int = 1
     init_var: InitVar[str]  # E: Dataclass field `init_var` without a default may not follow dataclass field with a default
     y: int  # E: Dataclass field `y` without a default may not follow dataclass field with a default
-    "#,
+"#,
 );
 
 testcase!(
@@ -1045,7 +1045,7 @@ class C:
     x: int = 1
     class_var: ClassVar[str] = "ignored"  # OK - ClassVar fields bypass ordering validation
     y: int  # E: Dataclass field `y` without a default may not follow dataclass field with a default
-    "#,
+"#,
 );
 
 testcase!(
@@ -1059,7 +1059,7 @@ class C:
     c: float = field(kw_only=False, default=3.14) # positional override, has default
     d: bool = field(kw_only=False)                # E: Dataclass field `d` without a default may not follow dataclass field with a default
 C("hello", 3.14, a=1, d=True)
-    "#,
+"#,
 );
 
 testcase!(
@@ -1073,7 +1073,7 @@ class C:
     y: float = field(kw_only=False)   # positional override
     z: bool
 C("hello", 3.14, w=1, z=True)
-    "#,
+"#,
 );
 
 testcase!(
@@ -1087,7 +1087,7 @@ class C:
     c: float = 3.14                   # positional field with default
     d: bool = field(kw_only=False)    # E: Dataclass field `d` without a default may not follow dataclass field with a default
 C(1, 2.71, b="hello", d=True)
-    "#,
+"#,
 );
 
 testcase!(
@@ -1102,7 +1102,7 @@ class C:
     z: int # E: Dataclass field `z` without a default may not follow dataclass field with a default
 C(5, y=2) # E: Missing argument `z` in function `C.__init__`
 C(5, y=2, z=3)
-    "#,
+"#,
 );
 
 testcase!(
@@ -1116,7 +1116,7 @@ class C:
     z: int # E: Dataclass field `z` without a default may not follow dataclass field with a default
 C(5, y=2) # E: Missing argument `z` in function `C.__init__`
 C(5, 1, y=2)
-    "#,
+"#,
 );
 
 testcase!(
@@ -1134,7 +1134,7 @@ no_slots = NoSlots(x=0)
 no_slots.__slots__ # E: no attribute `__slots__`
 slots = Slots(x=0)
 assert_type(slots.__slots__, tuple[Literal['x']])
-    "#,
+"#,
 );
 
 testcase!(
@@ -1146,7 +1146,7 @@ from typing import assert_type
 class C:
     x: int = field(init=False)
 assert_type(C.__match_args__, tuple[()])
-    "#,
+"#,
 );
 
 testcase!(
@@ -1158,7 +1158,7 @@ from typing import assert_type, Literal
 class C:
     x: InitVar[int]
 assert_type(C.__match_args__, tuple[Literal['x']])
-    "#,
+"#,
 );
 
 // InitVars are passed positionally to `__post_init__`, in the order in which they're defined.
@@ -1184,5 +1184,5 @@ class Bad2:
     y: InitVar[str]
     z: InitVar[bytes]
     def __post_init__(self, *, y: str, z: bytes): ...  # E: `__post_init__` type
-    "#,
+"#,
 );

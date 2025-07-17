@@ -30,7 +30,7 @@ with Foo() as foo:
 bar: str = "abc"
 with Foo() as bar: # E: `int` is not assignable to variable `bar` with type `str`
     assert_type(bar, str)
-    "#,
+"#,
 );
 
 testcase!(
@@ -53,7 +53,7 @@ class Foo:
 async def test() -> None:
     async with Foo() as foo:
         assert_type(foo, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -66,7 +66,7 @@ def test_sync() -> None:
 async def test_async() -> None:
     async with "abc" as bar:  # E: has no attribute `__aenter__` # E: has no attribute `__aexit__`
         pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -86,7 +86,7 @@ class Foo:
 
 with Foo() as foo:  # E: Expected `__enter__` to be a callable, got int
     pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -99,7 +99,7 @@ class Foo:
 
 with Foo() as foo:  # E: Expected `__exit__` to be a callable, got int
     pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -114,7 +114,7 @@ class Foo:
 
 with Foo() as foo:  # E: Expected 0 positional arguments, got 3
     pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -129,7 +129,7 @@ class Foo:
 
 with Foo() as foo: # E: Argument `BaseException | None` is not assignable to parameter `exc_value` with type `int` # E: Argument `TracebackType | None` is not assignable to parameter `traceback` with type `int` # E: Argument `type[BaseException] | None` is not assignable to parameter `exc_type` with type `int`
     pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -151,7 +151,7 @@ class Foo:
 
 with Foo() as foo:  # E: Cannot use `Foo` as a context manager\n  Return type `str` of function `Foo.__exit__` is not assignable to expected return type `bool | None`
     pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -204,7 +204,7 @@ testcase!(
 class CM:
   def __enter__(self) -> None:
     pass
-  
+
   def __exit__(self, *args) -> bool:
     return False
 
@@ -223,7 +223,7 @@ from typing import Literal
 class CM:
   def __enter__(self) -> None:
     pass
-  
+
   def __exit__(self, *args) -> Literal[True]:
     return True
 
@@ -244,7 +244,7 @@ from typing import Literal
 class CM:
   def __enter__(self) -> None:
     pass
-  
+
   def __exit__(self, *args) -> Literal[False]:
     return False
 
@@ -281,5 +281,5 @@ def f() -> Iterator[str]:
 def g() -> bool:
     with f():
         return True
-    "#,
+"#,
 );

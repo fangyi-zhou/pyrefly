@@ -163,7 +163,7 @@ class BChild(B):
 def f(a: AChild, b: BChild):
     assert_type(a.x, Any)
     assert_type(b.x, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -189,7 +189,7 @@ def f(b: B):
     assert_type(b.x1, str)
     assert_type(b.x2, Any)
     assert_type(b.x3, int)
-    "#,
+"#,
 );
 
 // See https://github.com/facebook/pyrefly/issues/622 for an example
@@ -205,7 +205,7 @@ class A:
 a = A()
 class B(type(a)):
     pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -215,7 +215,7 @@ class A:
     pass
 class B(type(A)):
     pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -230,5 +230,5 @@ class A(metaclass=M):
 class B(type(A)):
     pass
 assert_type(B.x, int)
-    "#,
+"#,
 );

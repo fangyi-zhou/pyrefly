@@ -45,7 +45,7 @@ class C(B, A):
     def g(self):
         assert_type(super(C, self).f(), bool)
         assert_type(super(B, self).f(), int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -69,7 +69,7 @@ class D(B, C, A):
 # At runtime, the super() call in B.f is evaluated with D as the starting class, so that C.f is called.
 # We can't do this statically without re-analyzing the body of B.f (too expensive).
 assert_type(D().f(), bool)  # E: assert_type(int, bool)
-    "#,
+"#,
 );
 
 testcase!(
@@ -89,7 +89,7 @@ class C:
         super(C, int | str)  # E: Expected second argument to `super` to be a class object or instance, got `type[int | str]`
     def f4(self):
         super(Unrelated, self)  # E: Illegal `super(type[Unrelated], C)` call: `C` is not an instance or subclass of `type[Unrelated]`
-    "#,
+"#,
 );
 
 testcase!(
@@ -100,7 +100,7 @@ testcase!(
 class C:
     def f(self):
         super(object, self)
-    "#,
+"#,
 );
 
 testcase!(
@@ -110,7 +110,7 @@ _super = super
 class C:
     def f(self):
         _super(C, self)
-    "#,
+"#,
 );
 
 testcase!(
@@ -126,7 +126,7 @@ super(A, A())
 super()  # E: `super` call with no arguments is valid only inside a method
 class B:
     super()  # E: `super` call with no arguments is valid only inside a method
-    "#,
+"#,
 );
 
 testcase!(
@@ -143,7 +143,7 @@ class B(A):
         return super().__new__(cls, x)
     def __init__(self, x):
         super().__init__(x)
-    "#,
+"#,
 );
 
 testcase!(
@@ -162,7 +162,7 @@ class B(A):
         return super(B, cls).__new__(cls, x)
     def __init__(self, x):
         super().__init__(x)
-    "#,
+"#,
 );
 
 testcase!(
@@ -181,7 +181,7 @@ class B(A):
         return super(B, cls).__new__(cls, x)
     def __init__(self, x):
         super().__init__(x)
-    "#,
+"#,
 );
 
 testcase!(
@@ -191,7 +191,7 @@ from typing import Self
 class A:
     def __new__(cls) -> Self:
         return super().__new__(cls)
-    "#,
+"#,
 );
 
 testcase!(
@@ -213,7 +213,7 @@ class B(A):
     def h():
         # No-argument super() is a runtime error
         super().f()  # E: `super` call with no arguments is not valid inside a staticmethod
-    "#,
+"#,
 );
 
 testcase!(
@@ -231,7 +231,7 @@ class B(A):
     def g(cls):
         assert_type(super().f(), int)
         assert_type(super(B, cls).f(), int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -245,7 +245,7 @@ class B(A):
     @classmethod
     def g(cls):
         super().f(B())
-    "#,
+"#,
 );
 
 // This is beyond what we support. We don't care what errors are generated as long as we don't crash.
@@ -258,7 +258,7 @@ class Alias(types.GenericAlias):
         class C(*super().__mro_entries__(bases)): # E: # E:
             pass
         return (C,)
-    "#,
+"#,
 );
 
 testcase!(
@@ -281,5 +281,5 @@ class D(MixinC, B):
         super().method_b()
     def method_c(self):
         super().method_c()
-    "#,
+"#,
 );

@@ -15,7 +15,7 @@ from typing import assert_type
 type X = int
 def f(x: X):
     assert_type(x, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -25,7 +25,7 @@ from typing import assert_type
 type X[T] = list[T]
 def f(x: X[int]):
     assert_type(x, list[int])
-    "#,
+"#,
 );
 
 testcase!(
@@ -34,7 +34,7 @@ testcase!(
 from typing import TypeVar
 T = TypeVar('T')
 type X = list[T]  # E: Type parameters used in `X`
-    "#,
+"#,
 );
 
 testcase!(
@@ -42,14 +42,14 @@ testcase!(
     r#"
 # Questionable code, but not an error
 type X[T] = list
-    "#,
+"#,
 );
 
 testcase!(
     test_bad_type_alias,
     r#"
 type X = 1  # E: number literal cannot be used in annotations
-    "#,
+"#,
 );
 
 testcase!(
@@ -60,7 +60,7 @@ T = TypeVar('T')
 X = list[T]
 def f(x: X[int]):
     assert_type(x, list[int])
-    "#,
+"#,
 );
 
 testcase!(
@@ -71,7 +71,7 @@ T = TypeVar('T')
 X: TypeAlias = list[T]
 def f(x: X[int]):
     assert_type(x, list[int])
-    "#,
+"#,
 );
 
 testcase!(
@@ -82,7 +82,7 @@ T = TypeVar('T')
 X = T | list[T] | None
 def f(x: X[int]):
     assert_type(x, int | list[int] | None)
-    "#,
+"#,
 );
 
 testcase!(
@@ -93,7 +93,7 @@ T = TypeVar('T')
 X: TypeAlias = T | list[T] | None
 def f(x: X[int]):
     assert_type(x, int | list[int] | None)
-    "#,
+"#,
 );
 
 testcase!(
@@ -105,7 +105,7 @@ def f(x: X[int, str]):
     assert_type(x, tuple[int, str])
 def f2(x: X):
     assert_type(x, tuple[Any, ...])
-    "#,
+"#,
 );
 
 testcase!(
@@ -118,7 +118,7 @@ def f(x: X[int, str]):
     assert_type(x, tuple[int, str])
 def f2(x: X):
     assert_type(x, tuple[Any, ...])
-    "#,
+"#,
 );
 
 testcase!(
@@ -131,7 +131,7 @@ def f(x: X[int, str]):
     assert_type(x, tuple[int, str])
 def f2(x: X):
     assert_type(x, tuple[Any, ...])
-    "#,
+"#,
 );
 
 testcase!(
@@ -143,7 +143,7 @@ def f(x: X[int, str]):
     assert_type(x, Callable[[int, str], None])
 def f2(x: X[[int, str]]):
     assert_type(x, Callable[[int, str], None])
-    "#,
+"#,
 );
 
 testcase!(
@@ -156,7 +156,7 @@ def f(x: X[int, str]):
     assert_type(x, Callable[[int, str], None])
 def f2(x: X[[int, str]]):
     assert_type(x, Callable[[int, str], None])
-    "#,
+"#,
 );
 
 testcase!(
@@ -169,7 +169,7 @@ def f(x: X[int, str]):
     assert_type(x, Callable[[int, str], None])
 def f2(x: X[[int, str]]):
     assert_type(x, Callable[[int, str], None])
-    "#,
+"#,
 );
 
 testcase!(
@@ -179,7 +179,7 @@ from typing import assert_type, Callable, Concatenate
 type X[**P] = Callable[Concatenate[int, P], None]
 def f(x: X[int, str]):
     assert_type(x, Callable[[int, int, str], None])
-    "#,
+"#,
 );
 
 testcase!(
@@ -190,7 +190,7 @@ P = ParamSpec('P')
 X = Callable[Concatenate[int, P], None]
 def f(x: X[int, str]):
     assert_type(x, Callable[[int, int, str], None])
-    "#,
+"#,
 );
 
 testcase!(
@@ -201,7 +201,7 @@ P = ParamSpec('P')
 X: TypeAlias = Callable[Concatenate[int, P], None]
 def f(x: X[int, str]):
     assert_type(x, Callable[[int, int, str], None])
-    "#,
+"#,
 );
 
 testcase!(
@@ -214,7 +214,7 @@ X2 = Callable[[T], str]
 def f(x1: X1[int], x2: X2[int]):
     assert_type(x1, Callable[..., int])
     assert_type(x2, Callable[[int], str])
-    "#,
+"#,
 );
 
 testcase!(
@@ -224,7 +224,7 @@ from typing import Any, assert_type
 type X[T1, T2] = dict[T1, T2]
 def f(x: X[int]):  # E: Expected 2 type arguments for `X`, got 1
     assert_type(x, dict[int, Any])
-    "#,
+"#,
 );
 
 testcase!(
@@ -235,7 +235,7 @@ T = TypeVar('T')
 X = Annotated[T, 'the world is quiet here']
 def f(x: X[int]):
     assert_type(x, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -243,7 +243,7 @@ testcase!(
     r#"
 from typing import TypeAlias
 X: TypeAlias = 1  # E: number literal cannot be used in annotations
-    "#,
+"#,
 );
 
 testcase!(
@@ -251,7 +251,7 @@ testcase!(
     r#"
 TypeAlias = int
 x: TypeAlias = 1
-    "#,
+"#,
 );
 
 testcase!(
@@ -305,7 +305,7 @@ type X3 = int
 X1.__add__  # ok
 X2.__add__  # ok
 X3.__add__  # E: Object of class `TypeAliasType` has no attribute `__add__`
-    "#,
+"#,
 );
 
 testcase!(
@@ -326,7 +326,7 @@ def f(x1: X1):  # E: Expected a type form, got instance of `Literal['A']`
 def g(x2: X2, x3: X3):
     assert_type(x2, A)
     assert_type(x3, A)
-    "#,
+"#,
 );
 
 testcase!(
@@ -355,7 +355,7 @@ def f2(x: X2[int]):
 def g(x: list[bool]):
     f1(x)
     f2(x)  # E: Argument `list[bool]` is not assignable to parameter `x` with type `list[int]`
-    "#,
+"#,
 );
 
 testcase!(
@@ -366,7 +366,7 @@ class C:
     type X = int
 def f(x: C.X):
     assert_type(x, int)
-    "#,
+"#,
 );
 
 // Note: this test documents how Pyre currently treats type aliases inside classes
@@ -389,7 +389,7 @@ def f(c: C[int]):
     assert_type(x, list[int])
 bad1: C.X  # E: Generic attribute `X` of class `C` is not visible on the class
 bad2: C[int].X  # E: Generic attribute `X` of class `C` is not visible on the class
-    "#,
+"#,
 );
 
 testcase!(
@@ -445,7 +445,7 @@ from typing import assert_type
 X: typing.TypeAlias = int
 def f(x: X | str):
     assert_type(x, int | str)
-    "#,
+"#,
 );
 
 testcase!(
@@ -511,7 +511,7 @@ def foo(x: Callable[[str], Any]) -> None:
     pass
 
 foo(str)
-    "#,
+"#,
 );
 
 testcase!(
@@ -527,7 +527,7 @@ class DiDegreeView(Generic[_Node]):
         self,
         nbunch: _NBunch[_Node] = None,
     ) -> None: ...
-    "#,
+"#,
 );
 
 testcase!(
@@ -541,7 +541,7 @@ class C: ...
 class F:
     T: TypeAlias = C
     def memmove(self, arg: T | R) -> None: ...
-    "#,
+"#,
 );
 
 testcase!(
@@ -565,7 +565,7 @@ X = list[T]
 def f(x1: X | None, x2: X[int] | None):
     assert_type(x1, list[Any] | None)
     assert_type(x2, list[int] | None)
-    "#,
+"#,
 );
 
 testcase!(
@@ -577,7 +577,7 @@ Y = list[T] | set[T]
 def f(y1: Y | None, y2: Y[int] | None):
     assert_type(y1, list[Any] | set[Any] | None)
     assert_type(y2, list[int] | set[int] | None)
-    "#,
+"#,
 );
 
 testcase!(
@@ -593,7 +593,7 @@ def g(x: type[T][int]):  # E: invalid subscript expression
     pass
 def h(x: X[str]):  # should be an error about str not matching int
     pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -605,5 +605,5 @@ Ts = TypeVarTuple('Ts')
 Error1 = type[P]  # E: `ParamSpec[P]` is not allowed
 Error2 = type[Ts]  # E: `TypeVarTuple` is not allowed
 Error3 = type[Unpack[Ts]]  # E: `Unpack` is not allowed
-    "#,
+"#,
 );

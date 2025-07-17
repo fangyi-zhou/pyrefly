@@ -133,7 +133,7 @@ testcase!(
 from typing import TypeVarTuple
 
 _Ts = TypeVarTuple("_Ts")
-def f(*args: *_Ts) -> None: 
+def f(*args: *_Ts) -> None:
     f(*args)
 "#,
 );

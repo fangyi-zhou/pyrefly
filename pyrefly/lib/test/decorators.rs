@@ -19,7 +19,7 @@ def decorated(x: int) -> int:
    return x
 
 assert_type(decorated, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -32,7 +32,7 @@ class Foo:
         """
         Some docstring
         """
-    "#,
+"#,
 );
 
 testcase!(
@@ -47,7 +47,7 @@ def decorated(x: int) -> str:
    return f"{x}"
 
 reveal_type(decorated)  # E: revealed type: (x: int) -> str
-    "#,
+"#,
 );
 
 testcase!(
@@ -62,7 +62,7 @@ def decorated(x: int) -> str:
    return f"{x}"
 
 assert_type(decorated, Callable[[int, int], str])
-    "#,
+"#,
 );
 
 testcase!(
@@ -80,7 +80,7 @@ def decorated(x: int) -> str:
    return f"{x}"
 
 assert_type(decorated, Callable[[int], list[set[str]]])
-    "#,
+"#,
 );
 
 testcase!(
@@ -93,7 +93,7 @@ class im_callable:
 def f(x: int) -> int:
     return x
 reveal_type(f)  # E: revealed type: (x: int) -> int
-    "#,
+"#,
 );
 
 // This test case does not directly use a decorator, but it verifies our
@@ -105,7 +105,7 @@ testcase!(
     r#"
 from typing import MutableSequence
 x: MutableSequence[int]
-    "#,
+"#,
 );
 
 // A regression test for a bug where we were not correctly handling the anywhere
@@ -123,7 +123,7 @@ def anywhere():
 @decorator
 def decorated(x: int) -> int:
    return x
-    "#,
+"#,
 );
 
 testcase!(
@@ -142,7 +142,7 @@ class C:
 
 assert_type(C.f(), int)
 assert_type(C.g(), int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -161,7 +161,7 @@ class C:
 
 C.f(0)
 assert_type(C.g(0), int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -172,7 +172,7 @@ from typing import final, reveal_type
 def f(x: int) -> int:
     return x
 reveal_type(f)  # E: revealed type: (x: int) -> int
-    "#,
+"#,
 );
 
 testcase!(
@@ -197,7 +197,7 @@ class C:
         return x
 
 assert_type(C().f(42), int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -213,7 +213,7 @@ class C:
 
 # `f` is `Any` now, we should be able to call it with anything and get back `Any`.
 assert_type(C().f("any", b"thing"), Any)
-    "#,
+"#,
 );
 
 testcase!(
@@ -230,7 +230,7 @@ class C:
     def f(self): ...
 
 assert_type(C().f(0), Any)
-    "#,
+"#,
 );
 
 testcase!(
@@ -247,7 +247,7 @@ class C:
         return x
 
 assert_type(C().f(0), int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -269,7 +269,7 @@ class Foo:
 
 def test(x: Foo) -> None:
     assert_type(x.p, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -290,7 +290,7 @@ class Foo:
 
 def test(x: Foo) -> None:
     assert_type(x.p(), int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -307,7 +307,7 @@ def f():
 def g(a: A):
     pass
 g(f)
-    "#,
+"#,
 );
 
 testcase!(
@@ -321,7 +321,7 @@ def f0(arg: Callable[..., int]) -> Callable[..., int]: ...
 @dec  # E: Argument `int` is not assignable to parameter `arg` with type `(...) -> Any` in function `dec`
 @f0
 def f0(arg: Callable[..., int]) -> Callable[..., int]: ...
-    "#,
+"#,
 );
 
 // Reported in https://github.com/facebook/pyrefly/issues/491
@@ -424,14 +424,14 @@ testcase!(
     r#"
 from typing import overload, Any
 @overload
-def foo(a: int) -> int: ...  
+def foo(a: int) -> int: ...
 @overload
 def foo(a: str) -> str:
     """Docstring"""
 def foo(*args, **kwargs) -> Any:
     pass
-    
-    "#,
+
+"#,
 );
 
 testcase!(
@@ -439,15 +439,15 @@ testcase!(
     r#"
 from typing import overload, Any
 @overload
-def foo(a: int) -> int: ...  
+def foo(a: int) -> int: ...
 @overload
-def foo(a: str) -> str: 
+def foo(a: str) -> str:
     """Docstring"""
     return 123             # E: Returned type `Literal[123]` is not assignable to declared return type `str`
 def foo(*args, **kwargs) -> Any:
     pass
-    
-    "#,
+
+"#,
 );
 
 testcase!(
@@ -474,5 +474,5 @@ class C:
         @abstractmethod
         def method5(self) -> int:
             return "sub" # E: Returned type `Literal['sub']` is not assignable to declared return type `int`
-    "#,
+"#,
 );

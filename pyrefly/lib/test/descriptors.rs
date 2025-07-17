@@ -27,7 +27,7 @@ def f(c: C):
     assert_type(c.foo(), int)
     assert_type(C.bar(42), int)
     assert_type(c.bar(42), int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -41,7 +41,7 @@ class C:
 def f(c: C):
     assert_type(c.bar(42), int)
     assert_type(c.bar(42), int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -55,7 +55,7 @@ class C:
 def f(c: C):
     reveal_type(C.foo)  # E: revealed type: BoundMethod[type[C], (cls: type[Self@C]) -> int]
     reveal_type(c.foo)  # E: revealed type: BoundMethod[type[C], (cls: type[Self@C]) -> int]
-    "#,
+"#,
 );
 
 testcase!(
@@ -69,7 +69,7 @@ class C:
 def f(c: C):
     assert_type(C.foo(), int)
     assert_type(c.foo(), int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -83,7 +83,7 @@ class C:
 def f(c: C):
     assert_type(C.foo(), int)
     assert_type(c.foo(), int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -98,7 +98,7 @@ def f(c: C):
     assert_type(c.foo, int)
     c.foo = 42  # E: Attribute `foo` of class `C` is a read-only property and cannot be set
     reveal_type(C.foo)  # E: revealed type: (self: Self@C) -> int
-    "#,
+"#,
 );
 
 testcase!(
@@ -116,7 +116,7 @@ def f(c: C):
     assert_type(c.foo, int)
     c.foo = "42"
     reveal_type(C.foo)  # E: revealed type: (self: Self@C, value: str)
-    "#,
+"#,
 );
 
 // Make sure we don't crash.
@@ -126,7 +126,7 @@ testcase!(
 @staticmethod
 class C:
     pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -141,7 +141,7 @@ assert_type(C.d, int)
 assert_type(C().d, int)
 C.d = 42  # E: Attribute `d` of class `C` is a descriptor, which may not be overwritten
 C().d = 42  # E:  Attribute `d` of class `C` is a read-only descriptor with no `__set__` and cannot be set
-    "#,
+"#,
 );
 
 testcase!(
@@ -156,7 +156,7 @@ assert_type(C.d, D)
 assert_type(C().d, D)
 C.d = 42  # E: Attribute `d` of class `C` is a descriptor, which may not be overwritten
 C().d = 42
-    "#,
+"#,
 );
 
 testcase!(
@@ -172,7 +172,7 @@ assert_type(C.d, int)
 assert_type(C().d, int)
 C.d = "42"  # E: Attribute `d` of class `C` is a descriptor, which may not be overwritten
 C().d = "42"
-    "#,
+"#,
 );
 
 testcase!(
@@ -191,7 +191,7 @@ assert_type(C.cp, Any) # Should probably be int
 assert_type(C().cp, Any) # Should probably be int
 C.cp = 42  # E: Attribute `cp` of class `C` is a descriptor, which may not be overwritten
 C().cp = 42  # E:  Attribute `cp` of class `C` is a read-only descriptor with no `__set__` and cannot be set
-    "#,
+"#,
 );
 
 testcase!(
@@ -209,7 +209,7 @@ a = A()
 assert_type(a.x, A)
 a.x = a  # OK
 a.x = 0  # E: `Literal[0]` is not assignable to parameter `value` with type `A`
-    "#,
+"#,
 );
 
 testcase!(
@@ -221,7 +221,7 @@ class A:
     @property
     def f(self): return 0
 reveal_type(A.f.fset)  # E: revealed type: ((Any, Any) -> None) | None
-    "#,
+"#,
 );
 
 testcase!(
@@ -238,5 +238,5 @@ def f(a: A):
     assert_type(a.f(), Coroutine[Any, Any, int])
     assert_type(A.g(), Coroutine[Any, Any, int])
     assert_type(A.h(), Coroutine[Any, Any, int])
-    "#,
+"#,
 );

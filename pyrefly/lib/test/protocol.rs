@@ -33,7 +33,7 @@ def g(p: P, c1: C1, c2: C2, c3: C3, c4: C4, c5: C5) -> None:
     f(c4)
     f(c5)  # E: Argument `C5` is not assignable to parameter `proto` with type `P`
     c: C1 = p  # E: `P` is not assignable to `C1`
- "#,
+"#,
 );
 
 testcase!(
@@ -49,7 +49,7 @@ class P2(Protocol):
     x: int
 class P3(Protocol, P2):
     y: str
- "#,
+"#,
 );
 
 testcase!(
@@ -67,7 +67,7 @@ p2: P = f2  # E: `(x: str) -> str` is not assignable to `P`
 def g(p: P) -> None:
     c1: Callable[[int], str] = p
     c2: Callable[[str], str] = p  # E: `P` is not assignable to `(str) -> str`
- "#,
+"#,
 );
 
 testcase!(
@@ -97,7 +97,7 @@ def f(p1: P1, p2: P2, p3: P3, p4: P4):
     x6: P3 = p2  # E: `P2` is not assignable to `P3`
     x7: P4 = p1
     x8: P4 = p2
- "#,
+"#,
 );
 
 testcase!(
@@ -186,7 +186,7 @@ class P1(Protocol):
 class C1:
     @property
     def foo(self) -> int:
-        return 1 
+        return 1
 a: P1 = C1()
 
 class P2(Protocol):
@@ -196,7 +196,7 @@ class P2(Protocol):
 class C2:
     @property
     def foo(self) -> object:
-        return 1 
+        return 1
 b: P2 = C2()  # E: `C2` is not assignable to `P2`
 
 class P3(Protocol):
@@ -209,7 +209,7 @@ class P3(Protocol):
 class C3:
     @property
     def foo(self) -> int:
-        return 1 
+        return 1
     @foo.setter
     def foo(self, val: int) -> None:
         pass
@@ -225,7 +225,7 @@ class P4(Protocol):
 class C4:
     @property
     def foo(self) -> int:
-        return 1 
+        return 1
     @foo.setter
     def foo(self, val: object) -> None:
         pass
@@ -238,7 +238,7 @@ class P5(Protocol):
 class C5:
     @property
     def foo(self) -> int:
-        return 1 
+        return 1
     @foo.setter
     def foo(self, val: object) -> None:
         pass
@@ -294,7 +294,7 @@ def f(x: Hashable):
     pass
 f(A())
 f(B())  # E: Argument `B` is not assignable to parameter `x` with type `Hashable`
-    "#,
+"#,
 );
 
 testcase!(
@@ -304,7 +304,7 @@ from typing import Protocol
 class A(Protocol):
     pass
 a: A = A()  # E: Cannot instantiate `A` because it is a protocol
-    "#,
+"#,
 );
 
 testcase!(
@@ -319,7 +319,7 @@ class C:
     def __getattr__(self, name: str) -> int: ...
 
 f(C()) # E: Argument `C` is not assignable to parameter `proto` with type `P`
-    "#,
+"#,
 );
 
 testcase!(
@@ -336,7 +336,7 @@ class C:
 def f(x: P):
     pass
 f(C())
-    "#,
+"#,
 );
 
 testcase!(
@@ -351,7 +351,7 @@ def decorate(func) -> P: ...
 def f():
     pass
 assert_type(f.x, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -363,7 +363,7 @@ class P(Protocol):
     x: int
     def f(self, y: str):
         self.y = y  # E: Attribute `y` is implicitly defined by assignment in method `f`, which is not a constructor
-    "#,
+"#,
 );
 
 testcase!(
@@ -526,10 +526,10 @@ class DataOnlyProtocol(Protocol):
 class Implementation:
     name: str = "test"
     value: int = 42
-    
+
     def process(self) -> None:
         pass
-    
+
     def validate(self) -> bool:
         return True
 
@@ -551,14 +551,14 @@ testcase!(
 from typing import runtime_checkable
 
 # Applying @runtime_checkable to a non-protocol class should fail
-@runtime_checkable  
+@runtime_checkable
 class RegularClass: # E: @runtime_checkable can only be applied to Protocol classes
     def method(self) -> int:
         return 42
 
 # This should also fail
-@runtime_checkable  
-class AnotherClass: # E: @runtime_checkable can only be applied to Protocol classes  
+@runtime_checkable
+class AnotherClass: # E: @runtime_checkable can only be applied to Protocol classes
     x: int = 5
 "#,
 );

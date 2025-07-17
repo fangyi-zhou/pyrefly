@@ -65,7 +65,7 @@ def f(condition) -> None:
         x = "hello world"
         assert_type(x, Literal["hello world"])
     assert_type(x, Literal["hello world"] | None)
-    "#,
+"#,
 );
 
 testcase!(
@@ -80,7 +80,7 @@ def f(condition) -> None:
         x = [x]
         assert_type(x, list[int])
     assert_type(x, Literal[1] | list[int])
-    "#,
+"#,
 );
 
 testcase!(
@@ -92,7 +92,7 @@ def f(condition) -> None:
     while condition():
         pass
     assert_type(x, Literal[1])
-    "#,
+"#,
 );
 
 testcase!(
@@ -104,7 +104,7 @@ def f(condition) -> None:
     while condition():
         x = x
     assert_type(x, Literal[1])
-    "#,
+"#,
 );
 
 testcase!(
@@ -117,7 +117,7 @@ def f(condition1, condition2) -> None:
         if condition2():
             x = "hello"
     assert_type(x, Literal['hello'] | None)
-    "#,
+"#,
 );
 
 testcase!(
@@ -134,7 +134,7 @@ def f(cond1, cond2, cond3) -> None:
             y = x
     assert_type(x, Literal["", 1])
     assert_type(y, Literal["", 1])
-    "#,
+"#,
 );
 
 testcase!(
@@ -148,7 +148,7 @@ def f(condition) -> None:
     else:
         x = ""
     assert_type(x, Literal[""])
-    "#,
+"#,
 );
 
 testcase!(
@@ -167,7 +167,7 @@ def f(cond1, cond2) -> None:
         assert_type(x, Literal["overwritten"] | None)
         x = "default"
     assert_type(x, Literal["default", "value"])
-    "#,
+"#,
 );
 
 testcase!(
@@ -178,7 +178,7 @@ while False:
 else:
     while False:
         x = 1
-    "#,
+"#,
 );
 
 testcase!(
@@ -190,7 +190,7 @@ def f(cond):
     while cond():
         x: int = 1
     assert_type(x, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -201,7 +201,7 @@ def f(x: list[int]) -> None:
     for i in x:
         assert_type(i, int)
     assert_type(i, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -211,7 +211,7 @@ from typing import assert_type
 def f(x: tuple[int, str]) -> None:
     for i in x:
         assert_type(i, int | str)
-    "#,
+"#,
 );
 
 testcase!(
@@ -220,7 +220,7 @@ testcase!(
 from typing import assert_type, LiteralString
 for i in "abcd":
     assert_type(i, LiteralString)
-    "#,
+"#,
 );
 
 testcase!(
@@ -230,7 +230,7 @@ from typing import Any, assert_type
 def f(x: Any):
     for i in x:
         assert_type(i, Any)
-    "#,
+"#,
 );
 
 testcase!(
@@ -242,7 +242,7 @@ def f(x: list[int]):
     for i in x:
         y = i
     assert_type(y, int | None)
-    "#,
+"#,
 );
 
 testcase!(
@@ -256,7 +256,7 @@ def f(x: list[int]):
     else:
         y = 'done'
     assert_type(y, Literal['done'])
-    "#,
+"#,
 );
 
 testcase!(
@@ -267,7 +267,7 @@ def f(x: list[tuple[int, str]]) -> None:
     for (i, j) in x:
         assert_type(i, int)
         assert_type(j, str)
-    "#,
+"#,
 );
 
 testcase!(
@@ -278,7 +278,7 @@ def f(x: list[int]) -> None:
     for i in x:
         pass
     assert_type(i, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -288,7 +288,7 @@ def f(x: list[int]) -> None:
     i: int = 0
     for i in x:
         pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -298,7 +298,7 @@ def f(x: list[int]) -> None:
     i: str = ""
     for i in x: # E: Cannot use variable `i` with type `str` to iterate through `list[int]`
         pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -307,7 +307,7 @@ testcase!(
 from typing import assert_type
 y = [x for x in [1, 2, 3]]
 assert_type(y, list[int])
-    "#,
+"#,
 );
 
 testcase!(
@@ -316,7 +316,7 @@ testcase!(
 def f():
     y = [x for x in [1, 2, 3]]
     return x  # E: Could not find name `x`
-    "#,
+"#,
 );
 
 testcase!(
@@ -326,7 +326,7 @@ from typing import assert_type
 x = None
 y = [x for x in [1, 2, 3]]
 assert_type(x, None)
-    "#,
+"#,
 );
 
 testcase!(
@@ -336,7 +336,7 @@ from typing import assert_type
 x = None
 y = [x for _ in [1, 2, 3]]
 assert_type(y, list[None])
-    "#,
+"#,
 );
 
 testcase!(
@@ -345,7 +345,7 @@ testcase!(
 class C:
     pass
 [None for x in C.error]  # E: Class `C` has no class attribute `error`
-    "#,
+"#,
 );
 
 testcase!(
@@ -355,7 +355,7 @@ class C:
     pass
 def f(x):
     [None for y in x if "5" + 5]  # E: `+` is not supported between `Literal['5']` and `Literal[5]`
-    "#,
+"#,
 );
 
 testcase!(
@@ -363,7 +363,7 @@ testcase!(
     r#"
 def f(x: list[tuple[int]]):
     [None for (y, z) in x]  # E: Cannot unpack
-    "#,
+"#,
 );
 
 testcase!(
@@ -373,7 +373,7 @@ from typing import assert_type
 def f(x: list[tuple[int, str, bool]]):
     z = [y for (_, *y) in x]
     assert_type(z, list[list[bool | str]])
-    "#,
+"#,
 );
 
 testcase!(
@@ -382,7 +382,7 @@ testcase!(
 from typing import assert_type
 y = {x for x in [1, 2, 3]}
 assert_type(y, set[int])
-    "#,
+"#,
 );
 
 testcase!(
@@ -392,7 +392,7 @@ from typing import assert_type
 def f(x: list[tuple[str, int]]):
     d = {y: z for (y, z) in x}
     assert_type(d, dict[str, int])
-    "#,
+"#,
 );
 
 testcase!(
@@ -401,7 +401,7 @@ testcase!(
 from typing import assert_type, Generator
 y = (x for x in [1, 2, 3])
 assert_type(y, Generator[int, None, None])
-    "#,
+"#,
 );
 
 testcase!(
@@ -409,7 +409,7 @@ testcase!(
     r#"
 break  # E: Cannot `break` outside loop
 continue  # E: Cannot `continue` outside loop
-    "#,
+"#,
 );
 
 testcase!(
@@ -424,7 +424,7 @@ def f(cond):
             break
         x = "hello world"
     assert_type(x, Literal["hello world"] | int | None)
-    "#,
+"#,
 );
 
 testcase!(
@@ -441,7 +441,7 @@ def f(cond1, cond2):
         assert_type(x, Literal[1])
         x = "hello world"
     assert_type(x, Literal["hello world", 2] | None)
-    "#,
+"#,
 );
 
 testcase!(
@@ -455,7 +455,7 @@ def f(x):
     else:
         y = "2"
     assert_type(y, Literal["2"])
-    "#,
+"#,
 );
 
 testcase!(
@@ -464,7 +464,7 @@ testcase!(
 def f(x: str):
     for c in x:
         return
-    "#,
+"#,
 );
 
 testcase!(
@@ -483,7 +483,7 @@ while True:
         c = C()
 
 assert_type(c, C)
-    "#,
+"#,
 );
 
 testcase!(
@@ -1003,7 +1003,7 @@ def f(x: None):
         pass
     while x['nonsense']:  # E: Can't apply arguments to non-class
         pass
-    "#,
+"#,
 );
 
 // Regression test for a crash
@@ -1012,7 +1012,7 @@ testcase!(
     r#"
 def f(x: bool, y: int):
     return 0 if x else (y or 1)
-    "#,
+"#,
 );
 
 fn loop_export_env() -> TestEnv {
@@ -1177,7 +1177,7 @@ def foo() -> list[int]:
     results: list[int] = [1, 2, 3]
     for i, x in enumerate(results):
         results[i] = x * 10
-    return results  
+    return results
 "#,
 );
 
@@ -1201,7 +1201,7 @@ bar: str = "bar"
 
 def func():
     foo: str | None = None
-    
+
     for x in []:
         for y in []:
             pass
@@ -1237,7 +1237,7 @@ def test1() -> int:
     assert False
 def test2() -> int:  # E: Function declared to return `int` but is missing an explicit `return`
     assert True
-    "#,
+"#,
 );
 
 testcase!(

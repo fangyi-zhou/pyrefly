@@ -17,7 +17,7 @@ match 42:
         pass
 # Eventually, this should be an uninitialized-local error.
 print(y)
-    "#,
+"#,
 );
 
 testcase!(
@@ -30,7 +30,7 @@ def test(x: int | bytes | str):
             assert_type(x, int)
         case _ if isinstance(x, str):
             assert_type(x, str)
-    "#,
+"#,
 );
 
 testcase!(

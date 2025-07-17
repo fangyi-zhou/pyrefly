@@ -355,7 +355,7 @@ testcase!(
 from typing import reveal_type
 reveal_type()  # E: reveal_type needs 1 positional argument, got 0
 reveal_type(1)  # E: revealed type: Literal[1]
-    "#,
+"#,
 );
 
 testcase!(
@@ -365,7 +365,7 @@ from typing import reveal_type
 def f[T](x: T) -> T:
     return x
 reveal_type(f(0))  # E: revealed type: int
-    "#,
+"#,
 );
 
 testcase!(
@@ -384,7 +384,7 @@ class B("Base[str]"):  # E: Cannot use string annotation `Base[str]` as a base c
 
 assert_type(A().x, int)
 assert_type(B().x, str)
-    "#,
+"#,
 );
 
 testcase!(
@@ -498,7 +498,7 @@ from typing import reveal_type
 class C:
     def f(this):
         reveal_type(this)  # E: Self@C
-    "#,
+"#,
 );
 
 testcase!(
@@ -579,7 +579,7 @@ testcase!(
     test_complex,
     r#"
 z: complex =  3 + 4j
-    "#,
+"#,
 );
 
 testcase!(
@@ -590,7 +590,7 @@ class A:
 def f(x: A):
     for _ in x:  # E: Type `A` is not iterable
         pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -600,7 +600,7 @@ class A:
     pass
 for _ in A:  # E: Type `type[A]` is not iterable
     pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -617,7 +617,7 @@ for x in A[str]:
     assert_type(x, int)
 for _ in B[str]:  # E: Type `type[B[str]]` is not iterable
     pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -635,7 +635,7 @@ def f(x: A, y: B):
         pass
     for _ in y:  # E: Type `B` is not iterable
         pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -647,7 +647,7 @@ class A:
 def f(x: A):
     for _ in x:  # E: Type `A` is not iterable
         pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -660,7 +660,7 @@ class A:
 def f(x: A):
     for s in x:
         assert_type(s, str)
-    "#,
+"#,
 );
 
 testcase!(
@@ -672,7 +672,7 @@ class A:
 def f(x: A):
     for _ in x:  # E: Type `A` is not iterable\n  Argument `int` is not assignable to parameter `s` with type `str` in function `A.__getitem__`
         pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -682,7 +682,7 @@ class A:
     def __getitem__(self, i: int) -> int: ...
 for a in A:  # E: Type `type[A]` is not iterable
     pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -693,7 +693,7 @@ class A[T]:
 def f(x: type[A[int]]):
     for a in x:  # E: Type `type[A[int]]` is not iterable
         pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -701,7 +701,7 @@ testcase!(
     r#"
 for _ in None:  # E: `None` is not iterable
     pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -710,7 +710,7 @@ testcase!(
 def foo() -> str: ...
 assert foo(42)  # E: Expected 0 positional arguments
 assert False, foo(42)  # E: Expected 0 positional arguments
-    "#,
+"#,
 );
 
 testcase!(
@@ -721,7 +721,7 @@ class A:
         return i
 def f(a: A):
     return a["oops"]  # E: Argument `Literal['oops']` is not assignable to parameter `i` with type `int`
-    "#,
+"#,
 );
 
 testcase!(
@@ -745,7 +745,7 @@ testcase!(
 from typing import assert_type
 x: list[int, int] = []  # E: Expected 1 type argument for `list`, got 2
 assert_type(x, list[int])
-    "#,
+"#,
 );
 
 testcase!(
@@ -757,7 +757,7 @@ class C:
 c1: type[C] = C
 # TODO(stroxler): Handle `type[Any]` correctly here.
 c2: type[C, C] = C  # E: Expected 1 type argument for `type`, got 2
-    "#,
+"#,
 );
 
 testcase!(
@@ -767,7 +767,7 @@ from typing import Annotated, assert_type
 def f(x: Annotated[int, "test"], y: Annotated[int, "test", "test"]):
     assert_type(x, int)
     assert_type(y, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -871,7 +871,7 @@ def fail() -> Never: ...
 def f(x: int):
     y = x or fail()
     assert_type(y, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -880,14 +880,14 @@ testcase!(
 from typing import assert_type
 class A: pass
 assert_type(A, type[A])
-    "#,
+"#,
 );
 
 testcase!(
     test_compare_int_str_error,
     r#"
 0 < "oops"  # E: Argument `Literal['oops']` is not assignable to parameter `value` with type `int`
-    "#,
+"#,
 );
 
 testcase!(
@@ -899,7 +899,7 @@ class C:
 def f(c: C, x: int, y: str):
     x in c  # OK
     y in c  # E: Argument `str` is not assignable to parameter `x` with type `int`
-    "#,
+"#,
 );
 
 testcase!(
@@ -916,7 +916,7 @@ testcase!(
     test_empty_if,
     r#"
 # This parse error results in two identical Identifiers, which previously caused a panic.
-a = True if # E: Parse 
+a = True if # E: Parse
 "#,
 );
 
@@ -941,7 +941,7 @@ testcase!(
     r#"
 class C:
     x: int = oops  # E: Could not find name `oops`
-    "#,
+"#,
 );
 
 testcase!(
@@ -952,7 +952,7 @@ from pyre_extensions import PyreReadOnly
 def f(x: PyreReadOnly[str]):
     pass
 f("test")
-    "#,
+"#,
 );
 
 testcase!(
@@ -973,7 +973,7 @@ def test(x: "ForwardRef") -> None:
     assert_type(x, "ForwardRef")
 class ForwardRef:
     pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -985,7 +985,7 @@ typing.assert_type(0, str)  # E: assert_type(Literal[0], str) failed
 # Make sure that calling by bare name without importing performs the assertion, as this is very convenient for debugging.
 # It's fine if a name error is also generated.
 assert_type(0, str)  # E: assert_type(Literal[0], str) failed  # E: Could not find name `assert_type`
-    "#,
+"#,
 );
 
 testcase!(
@@ -997,7 +997,7 @@ typing.reveal_type(0)  # E: revealed type: Literal[0]
 # Make sure that calling by bare name without importing reveals the type, as this is very convenient for debugging.
 # It's fine if a name error is also generated.
 reveal_type(0)  # E: revealed type: Literal[0]  # E: Could not find name `reveal_type`
-    "#,
+"#,
 );
 
 testcase!(
@@ -1019,7 +1019,7 @@ assert_type(w, str)
 
 cast()  # E: `typing.cast` missing required argument `typ`  # E: `typing.cast` missing required argument `val`
 cast(1, 1)  # E: First argument to `typing.cast` must be a type
-    "#,
+"#,
 );
 
 testcase!(
@@ -1028,7 +1028,7 @@ testcase!(
 from typing import assert_type, reveal_type, Literal
 assert_type(0, Literal[0], oops=1)  # E: `assert_type` got an unexpected keyword argument `oops`
 reveal_type(0, oops=1)  # E: revealed type: Literal[0]  # E: `reveal_type` got an unexpected keyword argument `oops`
-    "#,
+"#,
 );
 
 testcase!(
@@ -1039,7 +1039,7 @@ at = assert_type
 rt = reveal_type
 at(0, str)  # E: assert_type(Literal[0], str) failed
 rt(0)  # E: revealed type: Literal[0]
-    "#,
+"#,
 );
 
 testcase!(
@@ -1051,7 +1051,7 @@ def reveal_type(x, y, z):
     pass
 assert_type()
 reveal_type(1, 2, 3)
-    "#,
+"#,
 );
 
 testcase!(
@@ -1060,11 +1060,11 @@ testcase!(
 from typing import Literal, assert_type, reveal_type
 
 a = assert_type(0, str) # E: assert_type(Literal[0], str) failed
-assert_type(a, Literal[0]) 
+assert_type(a, Literal[0])
 
 b = reveal_type(0) # E: revealed type: Literal[0]
 assert_type(b, Literal[0])
-    "#,
+"#,
 );
 
 // Regression test for a bug where special exports were no longer recognized
@@ -1081,7 +1081,7 @@ for _ in []:
 # Enum's functional form is detected via a special export.
 X = Enum('X', ['X'])
 assert_type(X, type[X])
-    "#,
+"#,
 );
 
 testcase!(
@@ -1091,7 +1091,7 @@ from typing import cast
 cast(lambda x: x, 1)  # E: First argument to `typing.cast` must be a type
 # Passing a listcomp as a type is nonsense; it's okay if we don't handle it optimally as long as we don't crash.
 cast([x for x in []], 1)  # E: First argument to `typing.cast` must be a type  # E: Could not find name `x`
-    "#,
+"#,
 );
 
 testcase!(
@@ -1112,7 +1112,7 @@ class B:
     def __radd__(self, other):
         return 42
 A() + B()
-    "#,
+"#,
 );
 
 testcase!(
@@ -1129,7 +1129,7 @@ def is_a_stub1(self) -> int:  # No error expected here.
     Some docstring
     """
     ...
-    "#,
+"#,
 );
 
 testcase!(
@@ -1138,7 +1138,7 @@ testcase!(
 from typing import Literal, assert_type
 def A(x: int | Literal[0], y: int | Literal[255]):
     assert_type(x - y, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -1158,7 +1158,7 @@ import types
 def f(x: types.ModuleType):
     pass
 f(types)
-    "#,
+"#,
 );
 
 testcase!(
@@ -1176,7 +1176,7 @@ is_func(A.f)  # OK
 is_method(A.f)  # E:
 is_func(A().f)  # E:
 is_method(A().f)  # OK
-    "#,
+"#,
 );
 
 testcase!(
@@ -1189,7 +1189,7 @@ class A(metaclass=M):
 def f(x: type):
     pass
 f(A)
-    "#,
+"#,
 );
 
 testcase!(
@@ -1221,7 +1221,7 @@ from typing import Sequence, assert_type
 
 def foo(a: list[str] | Sequence[str]) -> None:
     assert_type({'a', 'b', *a}, set[str])
-    "#,
+"#,
 );
 
 testcase!(
@@ -1232,7 +1232,7 @@ class A:
     def __getitem__[T](self, x: T) -> T:
         return x
 assert_type(A()["":"":""], slice[str, str, str])
-    "#,
+"#,
 );
 
 testcase!(
@@ -1245,7 +1245,7 @@ def f1(x: bool) -> Literal[False, True]:
     return x
 def f2(x: bool) -> Literal[False, True, 42]:
     return x
-    "#,
+"#,
 );
 
 testcase!(
@@ -1307,7 +1307,7 @@ testcase!(
     r#"
 # This used to panic: see https://github.com/facebook/pyrefly/issues/454
 *a += 0  # E: Parse error: Invalid augmented assignment target  # E: Could not find name `a`
-    "#,
+"#,
 );
 
 testcase!(
@@ -1315,14 +1315,14 @@ testcase!(
     r#"
 from typing import assert_type
 assert_type(__debug__, bool)
-    "#,
+"#,
 );
 
 testcase!(
     test_invalid_assignment_no_panic,
     r#"
 -a=a=  # E: Parse error: Invalid assignment target  # E: Parse error: Expected an expression
-    "#,
+"#,
 );
 
 testcase!(
@@ -1426,7 +1426,7 @@ testcase!(
 from typing import Any, Callable
 def g(f: Callable[[Any], int], inputs: Any) -> None:
     sum(map(f, inputs))
-    "#,
+"#,
 );
 
 testcase!(
@@ -1439,7 +1439,7 @@ TypeForm = type[T]
 
 reveal_type(T)  # E: type[TypeVar[T]]
 reveal_type(TypeForm)  # E: revealed type: type[type[T]]
-    "#,
+"#,
 );
 
 testcase!(
@@ -1648,13 +1648,13 @@ testcase!(
     r#"
 def f(x:complex, y:bool):
     return x - y
-    "#,
+"#,
 );
 
 testcase!(
     test_bin_op_bool_num,
     r#"
 def f(x:float, y:bool) -> float:
-    return x * y 
+    return x * y
 "#,
 );

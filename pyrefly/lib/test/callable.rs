@@ -111,7 +111,7 @@ class MyClass(metaclass=Meta):
         return super().__new__(cls)
 x1: Callable[[int], MyClass] = MyClass  # OK
 x2: Callable[[str], MyClass] = MyClass  # E: `type[MyClass]` is not assignable to `(str) -> MyClass`
-    "#,
+"#,
 );
 
 testcase!(
@@ -344,7 +344,7 @@ testcase!(
     r#"
 def test(*, x: int): ...
 test(1, 2)  # E: Expected argument `x` to be passed by name  # E: Expected 0 positional arguments, got 2
-    "#,
+"#,
 );
 
 testcase!(
@@ -353,7 +353,7 @@ testcase!(
 class A:
     def f(*, x): ...
 A().f(1)  # E: Expected argument `x` to be passed by name  # E: Expected 0 positional arguments, got 2 (including implicit `self`)
-    "#,
+"#,
 );
 
 testcase!(
@@ -409,7 +409,7 @@ testcase!(
     r#"
 def f(x: int = ""):  # E: Default `Literal['']` is not assignable to parameter `x` with type `int`
     pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -420,7 +420,7 @@ def f(x, y = "", z = None):
     assert_type(x, Any)
     assert_type(y, Any | str)
     assert_type(z, Any | None)
-    "#,
+"#,
 );
 
 testcase!(
@@ -690,7 +690,7 @@ def f(x: int) -> int:
 # This assertion (correctly) fails because x is a positional parameter rather than a positional-only one.
 # This test verifies that we produce a sensible error message that shows the mismatch.
 assert_type(f, Callable[[int], int])  # E: assert_type((x: int) -> int, (int) -> int) failed
-    "#,
+"#,
 );
 
 testcase!(
@@ -717,7 +717,7 @@ A.h("")  # E: in function `A.h`
 class B(A):
     pass
 B().f("")  # E: in function `A.f`
-    "#,
+"#,
 );
 
 testcase!(
@@ -823,7 +823,7 @@ class Foo:
         return a
     def bar(self, b: int) -> None:
         assert_type(self(b), int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -837,7 +837,7 @@ def f(): ...
 def g() -> str: ...
 assert_type(f(), None)
 assert_type(g(), str)
-    "#,
+"#,
 );
 
 testcase!(
@@ -846,7 +846,7 @@ testcase!(
 def f(x: int, /, **kwargs: str):
     pass
 f(0, x="1")
-    "#,
+"#,
 );
 
 testcase!(
@@ -854,7 +854,7 @@ testcase!(
     r#"
 isinstance(1, "not a class object")  # E: Expected class object
 issubclass(str, "not a class object")  # E: Expected class object
-    "#,
+"#,
 );
 
 testcase!(
@@ -866,5 +866,5 @@ def f[T](*, x: T) -> T:
 def g(f: Callable[..., Any]):
     pass
 g(f)
-    "#,
+"#,
 );

@@ -11,5 +11,5 @@ testcase!(
     test_literal_dict,
     r#"
 dict(x = 1, y = "test") # E:  No matching overload found for function `dict.__init__`
-    "#,
+"#,
 );

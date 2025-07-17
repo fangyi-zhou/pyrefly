@@ -378,7 +378,7 @@ P2 = ParamSpec("P2")
 def g(x: Callable[Concatenate[int, P2], int], *args: P2.args, **kwargs: P2.kwargs):
     f(x, 1)
     f(x)  # E: Expected 1 more positional argument in function `f`
-    f(x, 1, 2)  # Not OK, we aren't sure the 2nd param is an int 
+    f(x, 1, 2)  # Not OK, we aren't sure the 2nd param is an int
 "#,
 );
 
@@ -405,7 +405,7 @@ X = Callable[Concatenate[int, "oops"], int]  # E: Expected a `ParamSpec`  # E: E
 
 def f(x: X, y):
     x(0)
-  "#,
+"#,
 );
 
 testcase!(
@@ -419,7 +419,7 @@ def f(f: TA):
     f()
     f("")
     f(1, 2, 3, 4, 5)
-    "#,
+"#,
 );
 
 testcase!(
@@ -433,7 +433,7 @@ def run[**P, R](func: Callable[P, R], *args: P.args, **kwargs: P.kwargs) -> R:
         except Exception:
             pass
     raise NotImplementedError("Unreachable")
-  "#,
+"#,
 );
 
 testcase!(

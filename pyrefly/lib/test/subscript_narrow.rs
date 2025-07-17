@@ -27,7 +27,7 @@ def test(x: list[object], c1: C1, c2s: list[C2]):
     assert_type(c2s[0].x, object)
     assert isinstance(c2s[0].x, int)
     assert_type(c2s[0].x, int)
- "#,
+"#,
 );
 
 testcase!(
@@ -52,7 +52,7 @@ def test(x: list[object], c1: C1, c2s: list[C2], s: str):
     assert isinstance(c2s[0].x, int)
     c2s[0].x = s
     assert_type(c2s[0].x, str)
- "#,
+"#,
 );
 
 testcase!(
@@ -78,7 +78,7 @@ def test(x: list[object], c1: C1, c2s: list[C2], s: str, idx: int):
     assert_type(c2s[0].x, int)
     c2s[idx].x = s
     assert_type(c2s[0].x, object)
- "#,
+"#,
 );
 
 testcase!(
@@ -101,7 +101,7 @@ def test(x: dict[str, object], c1: C1, c2s: dict[str, C2]):
     assert_type(c2s["key1"].x, object)
     assert isinstance(c2s["key1"].x, int)
     assert_type(c2s["key1"].x, int)
- "#,
+"#,
 );
 
 testcase!(
@@ -126,7 +126,7 @@ def test(x: dict[str, object], c1: C1, c2s: dict[str, C2], s: str):
     assert isinstance(c2s["key1"].x, int)
     c2s["key1"].x = s
     assert_type(c2s["key1"].x, str)
- "#,
+"#,
 );
 
 testcase!(
@@ -152,7 +152,7 @@ def test(x: dict[str, object], c1: C1, c2s: dict[str, C2], key: str, s: str):
     assert_type(c2s["key1"].x, int)
     c2s[key].x = s
     assert_type(c2s["key1"].x, object)
- "#,
+"#,
 );
 
 testcase!(
@@ -163,7 +163,7 @@ from typing import Optional, Dict, Any, assert_type, Literal
 class ErrorContext:
     def __init__(self):
         self.system_context: dict[str, Any] | None = None
-    
+
     def update_context(self, data: dict[str, Any]) -> None:
         # Explicit None check
         if self.system_context is not None:
@@ -183,7 +183,7 @@ class ErrorContext:
             self.system_context = {"status": "active"}
 
         assert_type(self.system_context, dict[str, Any])
-            
+
         self.system_context["timestamp"] = "2024-01-01"
 
         assert_type(self.system_context, dict[str, Any])

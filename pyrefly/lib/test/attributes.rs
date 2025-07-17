@@ -16,7 +16,7 @@ class A:
 def f(a: A):
     a.x = 1  # OK
     a.x = "oops"  # E: `Literal['oops']` is not assignable to attribute `x` with type `int`
-    "#,
+"#,
 );
 
 testcase!(
@@ -27,7 +27,7 @@ class A:
     y: str
 def f(a: A):
     a.x, a.y = "x", "y"  # E: `Literal['x']` is not assignable to attribute `x` with type `int`
-    "#,
+"#,
 );
 
 testcase!(
@@ -39,7 +39,7 @@ class A:
         self.x = x
 def f(a: A):
     assert_type(a.x, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -50,7 +50,7 @@ class A:
         self.x = 0
     def f(self):
         self.x = "oops"  # E: `Literal['oops']` is not assignable to attribute `x` with type `int`
-    "#,
+"#,
 );
 
 testcase!(
@@ -62,7 +62,7 @@ class A:
         self.x = x  # E: `str` is not assignable to attribute `x` with type `int`
     def __init__(self, x: int):
         self.x = x
-    "#,
+"#,
 );
 
 testcase!(
@@ -74,7 +74,7 @@ class A:
         self.x = x  # E: Attribute `x` is implicitly defined by assignment in method `f`, which is not a constructor
 def f(a: A):
     assert_type(a.x, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -86,7 +86,7 @@ class A:
 class B(A):
     def f(self, x: int):
         self.x = x
-    "#,
+"#,
 );
 
 testcase!(
@@ -107,7 +107,7 @@ class D:
     x: ClassVar[int]
     def __init_subclass__(cls, x: int):
         cls.x = x
-    "#,
+"#,
 );
 
 testcase!(
@@ -118,7 +118,7 @@ class MyTestCase:
         self.x = 5
     def run(self):
         assert self.x == 5
-    "#,
+"#,
 );
 
 testcase!(
@@ -137,7 +137,7 @@ def func(x: X):
 y: Y = Y()
 func(y)
 y.foo()  # result is "hi"
-    "#,
+"#,
 );
 
 testcase!(
@@ -150,7 +150,7 @@ class B:
 def test(x: A | B):
     del x.x
     x.x = 1  # E: `Literal[1]` is not assignable to attribute `x` with type `str`
-    "#,
+"#,
 );
 
 testcase!(
@@ -176,7 +176,7 @@ def foo(x: Callable[[int], str], c: C, c2: C2, c3: C3):
     c2.f = x
     C3.f = x
     c3.f = x
-    "#,
+"#,
 );
 
 testcase!(
@@ -185,7 +185,7 @@ testcase!(
 class A:
     x: int = 5
     y: int = x
-    "#,
+"#,
 );
 
 testcase!(
@@ -200,7 +200,7 @@ class B:
 
 a: A = A()
 a.x: int = 5  # E: Type cannot be declared in assignment to non-self attribute `a.x`
-    "#,
+"#,
 );
 
 testcase!(
@@ -211,7 +211,7 @@ class A:
     x: str
     def __init__(self, x: int):
         self.x = x  # E: `int` is not assignable to attribute `x` with type `str`
-    "#,
+"#,
 );
 
 testcase!(
@@ -224,7 +224,7 @@ class A:
         self.x: int = x  # E: `str` is not assignable to attribute `x` with type `int`
 def f(a: A):
     assert_type(a.x, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -234,7 +234,7 @@ from typing import ClassVar
 class A[T]:
     x: ClassVar[T]  # E: `ClassVar` arguments may not contain any type variables
     y: ClassVar[list[T]]  # E: `ClassVar` arguments may not contain any type variables
-    "#,
+"#,
 );
 
 testcase!(
@@ -245,11 +245,11 @@ class A:
     x: int
     y: str
     def __init__(self):
-        self.x: Literal[1] = 1  
-        self.y: Final = "y"  
+        self.x: Literal[1] = 1
+        self.y: Final = "y"
 def f(a: A):
     assert_type(a.x, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -262,7 +262,7 @@ class A:
         self.x: Final = 0
 def f(a: A):
     assert_type(a.x, Literal[0])  # E: assert_type(int, Literal[0])
-    "#,
+"#,
 );
 
 testcase!(
@@ -299,7 +299,7 @@ class A:
         self.x = x  # E: `str` is not assignable to attribute `x` with type `int`
 def f(a: A):
     assert_type(a.x, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -309,7 +309,7 @@ class C:
     x: list[int | str]
 def f(c: C):
     c.x = [5]
-    "#,
+"#,
 );
 
 testcase!(
@@ -323,7 +323,7 @@ class C:
         f()
 def f(c: C):
     assert_type(c.x, int)
-    "#,
+"#,
 );
 
 // TODO: Should we implement simple control-flow heuristics so `C.x` is recognized here?
@@ -337,7 +337,7 @@ class C:
         self.x = 0  # E: Attribute `x` is implicitly defined by assignment in method `f`, which is not a constructor
 def f(c: C) -> int:
     return c.x
-    "#,
+"#,
 );
 
 testcase!(
@@ -347,7 +347,7 @@ class C:
     def f():
         pass
 C().f()  # E: Expected 0 positional arguments, got 1 (including implicit `self`)
-    "#,
+"#,
 );
 
 testcase!(
@@ -358,7 +358,7 @@ class C:
         pass
 C().f(C())  # OK
 C().f(0)    # E: Argument `Literal[0]` is not assignable to parameter `x` with type `C`
-    "#,
+"#,
 );
 
 // Make sure we treat `callable_attr` as a bare instance attribute, not a bound method.
@@ -373,7 +373,7 @@ class C:
 c = C()
 x = c.callable_attr(42)
 assert_type(x, int)
-    "#,
+"#,
 );
 
 // We currently treat `Callable` as not having method binding behavior. This is
@@ -451,7 +451,7 @@ f1(C.f)  # E: Argument `(self: Self@C, x: int) -> None` is not assignable to par
 f1(C().f)
 f2(C.f)
 f2(C().f)  # E: Argument `BoundMethod[C, (self: Self@C, x: int) -> None]` is not assignable to parameter `c` with type `(C, int) -> None`
-    "#,
+"#,
 );
 
 testcase!(
@@ -546,7 +546,7 @@ class C:
     def __init__(self):
         self.x = 42
 assert_type(f(C()).x, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -557,7 +557,7 @@ def f() -> NoReturn: ...
 def g():
     x = f().x
     assert_type(x, Never)
-    "#,
+"#,
 );
 
 testcase!(
@@ -569,7 +569,7 @@ def f():
     pass
 def g():
     assert_type(f.__code__, CodeType)
-    "#,
+"#,
 );
 
 testcase!(
@@ -581,7 +581,7 @@ class A:
         pass
 def g(a: A):
     assert_type(a.f.__self__, object)
-    "#,
+"#,
 );
 
 testcase!(
@@ -589,7 +589,7 @@ testcase!(
     r#"
 x = ...
 x.x  # E: Object of class `EllipsisType` has no attribute `x`
-    "#,
+"#,
 );
 
 testcase!(
@@ -600,7 +600,7 @@ from types import CodeType
 def f[T](x: T) -> T:
     return x
 assert_type(f.__code__, CodeType)
-    "#,
+"#,
 );
 
 testcase!(
@@ -618,7 +618,7 @@ class Meta(type):
 class C(metaclass=Meta):
     pass
 assert_type(C.x, int)
-    "#,
+"#,
 );
 
 fn env_with_stub() -> TestEnv {
@@ -630,7 +630,7 @@ fn env_with_stub() -> TestEnv {
 class A:
     x: int = ...
     y: int
-    "#,
+"#,
     );
     t
 }
@@ -644,7 +644,7 @@ from foo import A
 
 assert_type(A.x, int)
 assert_type(A.y, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -665,7 +665,7 @@ a.x = 1
 del a.x
 b.x = 1  # E: Object of class `B` has no attribute `x`
 del b.x  # E: Object of class `B` has no attribute `x`
-    "#,
+"#,
 );
 
 testcase!(
@@ -681,7 +681,7 @@ def test(foo: Foo) -> None:
     assert_type(foo.y, int)
     foo.x = 1  # E: Object of class `Foo` has no attribute `x`
     del foo.y  # E: Object of class `Foo` has no attribute `y`
-    "#,
+"#,
 );
 
 testcase!(
@@ -697,7 +697,7 @@ def test(foo: Foo) -> None:
     assert_type(foo.y, int)  # E: Argument `Literal['y']` is not assignable to parameter `name`
     foo.x = 1  # E: Object of class `Foo` has no attribute `x`
     del foo.y  # E: Object of class `Foo` has no attribute `y`
-    "#,
+"#,
 );
 
 testcase!(
@@ -712,7 +712,7 @@ class Foo:
 def test(foo: Foo) -> None:
     foo.x = 1
     foo.x = ""  # E: Argument `Literal['']` is not assignable to parameter `value` with type `int`
-    "#,
+"#,
 );
 
 testcase!(
@@ -726,7 +726,7 @@ class Foo:
 
 def test(foo: Foo) -> None:
     del foo.x
-    "#,
+"#,
 );
 
 testcase!(
@@ -740,7 +740,7 @@ class Foo:
 
 def test(foo: Foo) -> None:
     foo.x = 1  # E: Argument `Literal['x']` is not assignable to parameter `name` with type `int`
-    "#,
+"#,
 );
 
 testcase!(
@@ -755,7 +755,7 @@ ap.add_argument("-s", "--string-arg", type=str, default="")
 args: Namespace = ap.parse_args()
 if not args.string_arg:
     args.string_arg = "string-goes-here"
-    "#,
+"#,
 );
 
 testcase!(
@@ -768,7 +768,7 @@ assert_type(foo.x, int)
 assert_type(foo.y, int)
 foo.x = 1  # E: No attribute `x` in module `foo`
 del foo.y  # E: No attribute `y` in module `foo`
-    "#,
+"#,
 );
 
 testcase!(
@@ -798,7 +798,7 @@ class Test(B):
     @classmethod
     def m2(cls) -> None:
         assert_type(super().z, Any)
-    "#,
+"#,
 );
 
 testcase!(
@@ -842,11 +842,11 @@ class C:
         self.prev = False
     def __new__(cls, orig_func=None):
         if orig_func is None:
-            return super().__new__(cls) 
+            return super().__new__(cls)
 def f():
     with C():  # E: `NoneType` has no attribute `__enter__`  # E: `NoneType` has no attribute `__exit__`
         pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -863,7 +863,7 @@ reveal_type(Outer[int].Inner.x)  # E: revealed type: T | None
 reveal_type(Outer.Inner.x)  # E: revealed type: T | None
 reveal_type(Outer[int].Inner().x)  # E: revealed type: T | None
 reveal_type(Outer.Inner().x)  # E: revealed type: T | None
-   "#,
+"#,
 );
 
 testcase!(
@@ -873,7 +873,7 @@ def f(x, key, dict):
     for param in x:
         if key in dict:
             pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -883,7 +883,7 @@ from typing import ClassVar, assert_type
 class C:
     x: ClassVar[int]
 assert_type(C.x, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -905,7 +905,7 @@ class A:
         self.x = x
         self.x = y  # E: `float` is not assignable to attribute `x` with type `int`
         return self
-    "#,
+"#,
 );
 
 testcase!(
@@ -916,7 +916,7 @@ class A[T1 = int, T2]:  # E:
     x: T2
 def f(a: A):
     assert_type(a.x, Any)
-    "#,
+"#,
 );
 
 testcase!(
@@ -935,7 +935,7 @@ class D(C): # E: Invalid base class: `A | B`
     pass
 def f(d: D):
     assert_type(d.x, Any)
-    "#,
+"#,
 );
 
 testcase!(
@@ -947,7 +947,7 @@ class EMeta(type):
 class E(int, metaclass=EMeta):
     pass
 assert_type(E.EXAMPLE_VALUE, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -959,7 +959,7 @@ class EMeta(type):
 class E(metaclass=EMeta):
     def __getattr__(self, attr: str) -> str: ...
 assert_type(E.EXAMPLE_VALUE, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -969,7 +969,7 @@ from typing import assert_type
 class E:
     def __getattr__(self, attr: str) -> str: ...
 E.EXAMPLE_VALUE # E: Class `E` has no class attribute `EXAMPLE_VALUE`
-    "#,
+"#,
 );
 
 testcase!(
@@ -982,7 +982,7 @@ def f[T: Foo](y: T) -> T:
     assert_type(y.x, int)
     assert_type(T.x, int)
     return y
-    "#,
+"#,
 );
 
 testcase!(
@@ -997,7 +997,7 @@ def f[T: Foo | Bar](y: T, z: Foo | Bar) -> T:
     assert_type(z.x, int | str)
     assert_type(y.x, int | str)
     return y
-    "#,
+"#,
 );
 
 testcase!(
@@ -1019,7 +1019,7 @@ def test(x: type[int], y: type[int]) -> None:
     x >= y      # E: `>=` is not supported between `type[int]` and `type[int]`
     x in y      # E: `in` is not supported between `type[int]` and `type[int]`
     x not in y  # E: `not in` is not supported between `type[int]` and `type[int]`
-    "#,
+"#,
 );
 
 testcase!(
@@ -1029,7 +1029,7 @@ from typing import assert_type, Any
 class A[T]:
     def f(self) -> T: ...
 assert_type(A.f(A[int]()), int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -1039,7 +1039,7 @@ from typing import assert_type, Any
 class A[T]:
     def f[S](self, x: S) -> tuple[S, T]: ...
 assert_type(A.f(A[int](), ""), tuple[str, int]) # E: assert_type(tuple[str, Any], tuple[str, int])
-    "#,
+"#,
 );
 
 testcase!(
@@ -1053,7 +1053,7 @@ class A[T]:
     def f(self, x: T | None) -> T: ...
     def f(self, x=None): ...
 assert_type(A.f(A[int]()), int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -1062,7 +1062,7 @@ testcase!(
 class C:
     def __init__(self):
         self.x += 5  # E: Object of class `C` has no attribute `x`
-    "#,
+"#,
 );
 
 testcase!(
@@ -1077,7 +1077,7 @@ assert_type(A().x, list[Any])
 A().x = [42]
 A().y = [42]
 assert_type(A().y, list[Any])
-    "#,
+"#,
 );
 
 testcase!(
@@ -1093,7 +1093,7 @@ class FrozenData:
 def f(d: FrozenData):
     d.x = 42  # E: Cannot set field `x`
     d.y = "new"  # E: Cannot set field `y`
-    "#,
+"#,
 );
 
 testcase!(
@@ -1108,7 +1108,7 @@ class Point(NamedTuple):
 def f(p: Point):
     p.x = 10  # E: Cannot set field `x`
     p.y = 20  # E: Cannot set field `y`
-    "#,
+"#,
 );
 
 testcase!(
@@ -1123,7 +1123,7 @@ class Config(TypedDict):
 def f(c: Config):
     c["value"] = 42  # OK
     c["name"] = "new"  # E: Key `name` in TypedDict `Config` is read-only
-    "#,
+"#,
 );
 
 testcase!(
@@ -1136,7 +1136,7 @@ class Backend:
 class Options2(Backend.Options):
     pass
 Backend.Options = Options2  # E: A class object initialized in the class body is considered read-only
-    "#,
+"#,
 );
 
 testcase!(
@@ -1148,7 +1148,7 @@ class Backend:
 class ProcessGroupGloo(Backend):
     class Options(Backend.Options):
         pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -1161,7 +1161,7 @@ class Options2(Backend.Options):
     pass
 class ProcessGroupGloo(Backend):
     Options = Options2
-    "#,
+"#,
 );
 
 testcase!(
@@ -1171,7 +1171,7 @@ from typing import ClassVar, Final
 class C:
     x: ClassVar[Final[int]] = 42
 C.x = 43  # E: This field is marked as Final
-    "#,
+"#,
 );
 
 testcase!(
@@ -1183,11 +1183,11 @@ from typing import Self, cast, Any, assert_type
 class C:
     outputs: list[Any]
     def f(self, other):
-        other = cast(Self, other)  
+        other = cast(Self, other)
         assert_type(other, Self)
         assert_type(other.outputs, Any) # E: TODO: Expr::attr_infer_for_type
-        len(self.outputs) == len(other.outputs) # E: TODO: Expr::attr_infer_for_type attribute base undefined for type: Self 
-    "#,
+        len(self.outputs) == len(other.outputs) # E: TODO: Expr::attr_infer_for_type attribute base undefined for type: Self
+"#,
 );
 
 testcase!(
@@ -1199,7 +1199,7 @@ from typing import Any, Tuple
 def g(ann) -> None:
     if ann is Tuple: ...
     ann.__module__ # E: TODO: Expr::attr_infer_for_type attribute base undefined for type: type[Tuple] | Unknown (trying to access __module__)
-    "#,
+"#,
 );
 
 testcase!(
@@ -1208,11 +1208,11 @@ testcase!(
     r#"
 def f(obj, g, field_type, my_type,):
     assert issubclass(obj, tuple) and hasattr(obj, "_fields")
-    for f in obj._fields: # E: TODO: Expr::attr_infer_for_type attribute base undefined for type: type[tuple[Unknown, ...]] 
+    for f in obj._fields: # E: TODO: Expr::attr_infer_for_type attribute base undefined for type: type[tuple[Unknown, ...]]
         if isinstance(field_type, my_type) and g is not None:
             if g is None:
                 raise ValueError(
                     f"{obj.__name__}." # E: TODO: Expr::attr_infer_for_type attribute base undefined for type: @_ (trying to access __name__)
                 )
-    "#,
+"#,
 );

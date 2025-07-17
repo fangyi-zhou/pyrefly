@@ -13,7 +13,7 @@ testcase!(
 def test[T](x: T) -> None:
     y: int = x  # E: `T` is not assignable to `int`
     z: object = x  # OK
- "#,
+"#,
 );
 
 testcase!(
@@ -32,7 +32,7 @@ def test2[*Ts = int](x: tuple[*Ts]) -> tuple[*Ts]:  # E: Default for `TypeVarTup
 class C[*Ts = Unpack[tuple[int, int]]]:
     def foo(self) -> tuple[*Ts]: ...
 assert_type(C().foo(), tuple[int, int])
- "#,
+"#,
 );
 
 testcase!(
@@ -48,7 +48,7 @@ def test[**P = ...](x: Callable[P, None]) -> Callable[P, None]:
     return x
 def test2[**P = [str, int]](x: Callable[P, None]) -> Callable[P, None]:
     return x
- "#,
+"#,
 );
 
 testcase!(
@@ -60,7 +60,7 @@ def iter_iter[T](x: Iterator[T]) -> Iterator[T]:
     return iter(x)
 
 iter_iter(iter([1, 2, 3]))
- "#,
+"#,
 );
 
 testcase!(
@@ -79,7 +79,7 @@ def test[T: B](x: T) -> None:
 test(A())  # Not OK
 test(B())
 test(C())
- "#,
+"#,
 );
 
 testcase!(
@@ -101,7 +101,7 @@ test(A())  # Not OK
 test(B())
 test(C())
 test(D())
- "#,
+"#,
 );
 
 testcase!(
@@ -126,7 +126,7 @@ T1 = TypeVar("T1", B, C, default=A)  # E: Expected default `A` of `T1` to be one
 T2 = TypeVar("T2", B, C, default=B)
 T3 = TypeVar("T3", B, C, default=C)
 T4 = TypeVar("T4", B, C, default=D)  # E: Expected default `D` of `T4` to be one of the following constraints: `B`, `C`
- "#,
+"#,
 );
 
 testcase!(
@@ -151,7 +151,7 @@ T1 = TypeVar("T1", bound=C, default=A)  # E: Expected default `A` of `T1` to be 
 T2 = TypeVar("T2", bound=C, default=B)  # E: Expected default `B` of `T2` to be assignable to the upper bound of `C`
 T3 = TypeVar("T3", bound=C, default=C)
 T4 = TypeVar("T4", bound=C, default=D)
- "#,
+"#,
 );
 
 testcase!(
@@ -162,7 +162,7 @@ T = TypeVar('T', bound=Callable[[int], int])
 def func(a: T, b: int) -> T:
     assert_type(a(b), int)
     return a
- "#,
+"#,
 );
 
 testcase!(
@@ -175,7 +175,7 @@ T = TypeVar('T', bound=C)
 def func(c: T) -> C:
     assert_type(c.x, int)
     return c
- "#,
+"#,
 );
 
 testcase!(
@@ -188,7 +188,7 @@ class C[T = int]:
     attr: T
 reveal_type(C.meth)  # E: [T](self: C[T], /) -> C[T]
 assert_type(C.attr, int)  # E: assert_type(Any, int) failed  # E: Instance-only attribute `attr` of class `C` is not visible on the class
- "#,
+"#,
 );
 
 testcase!(
@@ -202,7 +202,7 @@ class B:
 def f[T: A | B](x: T) -> T:
     assert_type(x.x, int | str)
     return x
-    "#,
+"#,
 );
 
 testcase!(
@@ -216,7 +216,7 @@ class B:
 def f[T: (A, B)](x: T) -> T:
     assert_type(x.x, int | str)
     return x
-    "#,
+"#,
 );
 
 testcase!(
@@ -227,7 +227,7 @@ def f[T](x: T) -> T:
     assert_type(x.__doc__, str | None)
     x.nonsense # E: `object` has no attribute `nonsense`
     return x
-    "#,
+"#,
 );
 
 testcase!(
@@ -240,7 +240,7 @@ class A:
         return self
     def g(self: T) -> T:
         return self.f()
-    "#,
+"#,
 );
 
 testcase!(
@@ -251,7 +251,7 @@ class A:
         return self
 def g[T: A](a: T) -> T:
     return a.m()
-    "#,
+"#,
 );
 
 testcase!(
@@ -261,7 +261,7 @@ from typing import Self, TypeVar
 
 class B():
     def f(self) -> Self:
-        return self 
+        return self
 class C(B):
     pass
 class D(B):
@@ -270,7 +270,7 @@ class D(B):
 T = TypeVar( "T", C, D)
 def g(b: T) -> T:
     return b.f()
-    "#,
+"#,
 );
 
 testcase!(
@@ -284,7 +284,7 @@ class Foo[T: (A, B)]:
     y: T
     def foo(self) -> None:
         self.y.__class__
-    "#,
+"#,
 );
 
 testcase!(
@@ -301,7 +301,7 @@ class Foo[T: (A, B)]:
     y: T
     def foo(self) -> None:
         p: P = self.y
-    "#,
+"#,
 );
 
 testcase!(
@@ -317,5 +317,5 @@ class Foo[T: (A, B)]:
         self.y.x = 1
         self.y.x = ""  # E: `Literal['']` is not assignable to attribute `x` with type `int`
         del self.y.x
-    "#,
+"#,
 );

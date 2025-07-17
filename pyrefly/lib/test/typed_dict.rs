@@ -34,7 +34,7 @@ def test1(**kwargs: Coord):
     assert_type(kwargs, dict[str, Coord])
 def test2(**kwargs: Unpack[Coord]):
     assert_type(kwargs, Coord)
-    "#,
+"#,
 );
 
 testcase!(
@@ -47,7 +47,7 @@ class MyDict(TypedDict):
     x: NotRequired  # E: Expected a type argument for `NotRequired`
     y: Required  # E: Expected a type argument for `Required`
     z: ReadOnly  # E: Expected a type argument for `ReadOnly`
-    "#,
+"#,
 );
 
 testcase!(
@@ -57,7 +57,7 @@ from typing import TypedDict
 class Coord(TypedDict, object):  # E: Typed dictionary definitions may only extend other typed dictionaries
     x: int
     y: int
-    "#,
+"#,
 );
 
 testcase!(
@@ -81,7 +81,7 @@ c7: Coord = {"x": 1, **d}  # E: Unpacked `dict[str, int]` is not assignable to `
 def foo(c: Coord) -> None:
     pass
 foo({"x": 1, "y": 2})
-    "#,
+"#,
 );
 
 testcase!(
@@ -93,7 +93,7 @@ class Movie(TypedDict):
     name: str
     year: int
 m = Movie(name='Blade Runner', year=1982)
-    "#,
+"#,
 );
 
 testcase!(
@@ -108,7 +108,7 @@ def foo(c: Coord) -> None:
     c["x"] = "foo"  # E: `Literal['foo']` is not assignable to TypedDict key `x` with type `int`
     c["y"] = 3  # E: Key `y` in TypedDict `Coord` is read-only
     c["z"] = 4  # E: TypedDict `Coord` does not have key `z`
-    "#,
+"#,
 );
 
 testcase!(
@@ -124,15 +124,15 @@ class A(TypedDict):
 
 a1: A = {"x": 1, "y": 2}
 a2: A = {"x": 3, "y": 4}
-a1.update(a2) 
+a1.update(a2)
 
 class B(TypedDict):
     x: NotRequired[Never]
     y: ReadOnly[int]
 
 def update_a(a: A, b: B) -> None:
-    a.update(b) # E: No matching overload found for function `A.update` 
-    "#,
+    a.update(b) # E: No matching overload found for function `A.update`
+"#,
 );
 
 testcase!(
@@ -146,10 +146,10 @@ class A(TypedDict):
 
 def test(a: A) -> None:
     a.update([("x", 123), ("y", 456)])  # E: No matching overload found for function `A.update`
-    a.update([("y", 456)]) 
+    a.update([("y", 456)])
     a.update(x=789, y=999)  # E: No matching overload found for function `A.update`
-    a.update(y=999) 
-    "#,
+    a.update(y=999)
+"#,
 );
 
 testcase!(
@@ -164,7 +164,7 @@ def test():
     s['data'] = [42]
     s['data'] = [42, 'hello']
     s['data'] = ['hello']
-    "#,
+"#,
 );
 
 testcase!(
@@ -175,7 +175,7 @@ from typing import TypedDict
 class Coord(TypedDict, metaclass=EnumMeta):  # E: Typed dictionary definitions may not specify a metaclass
     x: int
     y: int
-    "#,
+"#,
 );
 
 testcase!(
@@ -190,7 +190,7 @@ def foo(c: Coord) -> None:
         pass
     for x in c:
         assert_type(x, str)
-    "#,
+"#,
 );
 
 testcase!(
@@ -203,7 +203,7 @@ class Coord[T](TypedDict):
 def foo(c: Coord[int]):
     x: int = c["x"]
     y: str = c["y"]  # E: `int` is not assignable to `str`
-    "#,
+"#,
 );
 
 testcase!(
@@ -213,7 +213,7 @@ from typing import TypedDict
 class Coord(TypedDict):
     x: int
     y: int = 2  # E: TypedDict item `y` may not be initialized
-    "#,
+"#,
 );
 
 testcase!(
@@ -230,7 +230,7 @@ def foo(c: Coord, key: str, key2: Literal["x", "y"]):
     x3: int = c[key]  # E: Invalid key for TypedDict `Coord`, got `str`
     x4: int = c["aaaaaa"]  # E: TypedDict `Coord` does not have key `aaaaaa`
     assert_type(c[key2], int | str)
-    "#,
+"#,
 );
 
 testcase!(
@@ -245,7 +245,7 @@ def foo(c: Coord):
     del c["x"]  # OK
     del c["y"]  # E: Key `y` in TypedDict `Coord` may not be deleted
     del c["z"]  # E: Key `z` in TypedDict `Coord` may not be deleted
-    "#,
+"#,
 );
 
 testcase!(
@@ -257,7 +257,7 @@ c: Coord = {"x": 1, " illegal ": 2}
 def test(c: Coord):
     x: int = c[" illegal "]
 Invalid = TypedDict()  # E: Expected a callable, got type[TypedDict]
-    "#,
+"#,
 );
 
 testcase!(
@@ -267,10 +267,10 @@ from typing import TypedDict, NotRequired
 
 class TD(TypedDict):
     x: NotRequired[int]
-    
+
 def f(td: TD):
-    td.pop("x") 
-    "#,
+    td.pop("x")
+"#,
 );
 
 testcase!(
@@ -294,10 +294,10 @@ td_r: TDRequired = {"a": 10, "b": "hi"}
 td_o: TDOptional = {"x": 42}
 td_m: TDMixed = {"a": 1, "x": 99}
 
-v1 = td_r.pop("a") # E: 
+v1 = td_r.pop("a") # E:
 assert_type(v1, object)
 
-v2 = td_r.pop("a", 3.14) # E: 
+v2 = td_r.pop("a", 3.14) # E:
 assert_type(v2, object)
 
 v3 = td_o.pop("x")
@@ -309,7 +309,7 @@ assert_type(v4, int)
 v5 = td_o.pop("x", "fallback")
 assert_type(v5, int | str)
 
-v6 = td_m.pop("a") # E: 
+v6 = td_m.pop("a") # E:
 assert_type(v6, Any)
 
 v7 = td_m.pop("x")
@@ -324,9 +324,9 @@ assert_type(v9, int | str)
 v10 = td_r.pop("abc", 123) # E:
 assert_type(v10, object)
 
-v11 = td_r.pop("abc", "default") # E: 
+v11 = td_r.pop("abc", "default") # E:
 assert_type(v11, object)
-    "#,
+"#,
 );
 
 testcase!(
@@ -350,14 +350,14 @@ td_r: TDRequired = {"a": 10, "b": "hi"}
 td_o: TDOptional = {"x": 42}
 td_m: TDMixed = {"a": 1, "x": 99}
 
-del td_r["a"]  # E: 
+del td_r["a"]  # E:
 del td_o["x"]  # OK
 del td_o["y"]  # OK
 del td_m["x"]  # OK
-del td_m["a"]  # E: 
-del td_r["nonexistent"]  # E: 
+del td_m["a"]  # E:
+del td_r["nonexistent"]  # E:
 
-# Delete optional key from TDOptional again 
+# Delete optional key from TDOptional again
 del td_o["x"]  # OK
 
 del td_r["b"]  # E:
@@ -365,10 +365,10 @@ del td_r["b"]  # E:
 del td_o["unknown"]  # E:
 
 key_var = "x"
-del td_o[key_var]  
+del td_o[key_var]
 
 unknown_key = "a"
-del td_m[unknown_key]  # E: 
+del td_m[unknown_key]  # E:
 
 td_r: TDRequired = {"a": 10, "b": "hi"}
 td_o: TDOptional = {"x": 42}
@@ -382,8 +382,8 @@ td_m.__delitem__("a") # E: No matching overload found for function `TDMixed.__de
 
 td_r.__delitem__("nonexistent") # E: Argument `Literal['nonexistent']` is not assignable to parameter `k` with type `Never`
 td_r.__delitem__("unknown") # E:  Argument `Literal['unknown']` is not assignable to parameter `k` with type `Never
- 
-    "#,
+
+"#,
 );
 
 testcase!(
@@ -392,22 +392,22 @@ testcase!(
 from typing import TypedDict, assert_type
 
 class TD1(TypedDict):
-    a: int 
-    b: str 
+    a: int
+    b: str
 
 class TD2(TypedDict):
-    c: float 
-    d: bool 
+    c: float
+    d: bool
 
 class TD3(TypedDict, total=False):
-    a: str 
-    f: int 
+    a: str
+    f: int
 
 class TD4(TypedDict):
-    a: int 
+    a: int
 
 class TD5(TypedDict, total=False):
-    a: int  
+    a: int
 
 td1 = TD1(a=1, b="x")
 td2 = TD2(c=3.14, d=True)
@@ -420,7 +420,7 @@ td14 = td1 | td4
 assert_type(td14.get("a"), int)
 td13 = td1 | td3 # E:   No matching overload found for function `_typeshed._type_checker_internals.TypedDictFallback.__or__`
 td15 = td1 | td5 # E: No matching overload found for function `_typeshed._type_checker_internals.TypedDictFallback.__or__`
-    "#,
+"#,
 );
 
 testcase!(
@@ -436,7 +436,7 @@ x: TD = {"a": 1, "b": 2}
 
 y: TD = {"a": "3", "b": "4"}
 
-x |= y  
+x |= y
 
 assert_type((x["a"]), int | str)
 
@@ -444,9 +444,9 @@ x |= {} # E: Augmented assignment produces a value of type `dict[str, object]`, 
 
 x: TD = {"a": 1, "b": 2}
 x.__ior__(y)
-x.__ior__({}) # E:  Missing required key `a` for TypedDict `TD` # E: Missing required key `b` for TypedDict `TD` 
+x.__ior__({}) # E:  Missing required key `a` for TypedDict `TD` # E: Missing required key `b` for TypedDict `TD`
 
-    "#,
+"#,
 );
 
 testcase!(
@@ -465,7 +465,7 @@ assert_type(result.get("c"), object | None)
 
 result = x.__ror__({"a": "1", "b": "2", "c":4})
 assert_type(result.get("c"), object | None)
-    "#,
+"#,
 );
 
 testcase!(
@@ -488,7 +488,7 @@ def foo(a: Coord, b: Coord3D, c: Pair):
     coord2: Coord3D = a  # E: `TypedDict[Coord]` is not assignable to `TypedDict[Coord3D]`
     coord3: Coord = c  # E: `TypedDict[Pair]` is not assignable to `TypedDict[Coord]`
     coord4: Pair = a  # E: `TypedDict[Coord]` is not assignable to `TypedDict[Pair]`
-    "#,
+"#,
 );
 
 testcase!(
@@ -505,7 +505,7 @@ class TD2(TypedDict):
 def foo(td: TD, td2: TD2) -> None:
     td: TD = td2  # E: `TypedDict[TD2]` is not assignable to `TypedDict[TD]`
     td2: TD2 = td
-    "#,
+"#,
 );
 
 testcase!(
@@ -522,7 +522,7 @@ class CoordNotRequired(TypedDict):
 def foo(a: Coord, b: CoordNotRequired):
     coord: Coord = b  # E: `TypedDict[CoordNotRequired]` is not assignable to `TypedDict[Coord]`
     coord2: CoordNotRequired = a  # E: `TypedDict[Coord]` is not assignable to `TypedDict[CoordNotRequired]`
-    "#,
+"#,
 );
 
 testcase!(
@@ -561,7 +561,7 @@ def foo(a: Coord, b: Coord2, c: Coord3, d: Coord4):
     coord4: Coord4 = a
     coord4 = b
     coord4 = c
-    "#,
+"#,
 );
 
 testcase!(
@@ -588,7 +588,7 @@ f4(**x)
 f5(**x)  # E: Expected key `z` to be required
 f6(**x)  # E: Argument `int` is not assignable to parameter `z` with type `str` in function `f6`
 f1(1, **x)  # E: Multiple values for argument `x`
-    "#,
+"#,
 );
 
 testcase!(
@@ -632,7 +632,7 @@ f(x=1, y=2)
 f(x=1, y=2, z=3)
 f(x=1, y=2, z=3, a=4)  # E: Unexpected keyword argument `a`
 f(x="", y=2)  # E: Argument `Literal['']` is not assignable to parameter `x` with type `int` in function `f`
-    "#,
+"#,
 );
 
 testcase!(
@@ -653,7 +653,7 @@ def foo(td2: TD2, td3: TD3) -> None:
     t1: TD2 = td3  # OK
     t2: TD = td2  # E: `TypedDict[TD2]` is not assignable to `TypedDict[TD]`
     t3: TD = td3  # E: `TypedDict[TD3]` is not assignable to `TypedDict[TD]`
-    "#,
+"#,
 );
 
 testcase!(
@@ -666,7 +666,7 @@ class B(A):
     y: str
 B(x=0, y='1')  # OK
 B(x=0, y=1)  # E: Argument `Literal[1]` is not assignable to parameter `y` with type `str` in function `B.__init__`
-    "#,
+"#,
 );
 
 testcase!(
@@ -677,7 +677,7 @@ class C[T](TypedDict):
      x: T
 assert_type(C(x=0), C[int])
 assert_type(C[str](x=""), C[str])
-    "#,
+"#,
 );
 
 testcase!(
@@ -690,7 +690,7 @@ class Coord(TypedDict):
 def foo(x: Coord, **kwargs: Unpack[Coord]):
     assert_type(x, Coord)
     assert_type(kwargs, Coord)
-    "#,
+"#,
 );
 
 testcase!(
@@ -704,7 +704,7 @@ class D(TypedDict):
 # Default values are completely ignored in constructor behavior, so requiredness in `__init__` should be
 # determined entirely by whether the field is required in the resulting dict.
 D(x=5)  # E: Missing argument `y`
-    "#,
+"#,
 );
 
 testcase!(
@@ -724,7 +724,7 @@ def foo(td0: TD0, td1: TD1) -> None:
     assert_type(td1, TD1)
     assert_type(td1['x'], int)
     assert_type(td1['y'], TD0)
-    "#,
+"#,
 );
 
 testcase!(
@@ -734,7 +734,7 @@ import typing
 from typing import assert_type
 X = typing.TypedDict('X', {'x': int})
 assert_type(X, type[X])
-    "#,
+"#,
 );
 
 testcase!(
@@ -744,7 +744,7 @@ from typing import TypedDict
 UserType1 = TypedDict("UserType1", {"name": str, "age": int}, total=False)
 user1: UserType1 = {"name": "Bob", "age": 40}
 name: str = user1.get("name", "n/a")
-    "#,
+"#,
 );
 
 testcase!(
@@ -759,7 +759,7 @@ def f(c: C, k1: str, k2: int):
     assert_type(c.get(k1), object)
     assert_type(c.get(k1, 0), object)
     c.get(k2)  # E: No matching overload
-    "#,
+"#,
 );
 
 testcase!(
@@ -770,7 +770,7 @@ class C(TypedDict):
     x: NotRequired[int]
 def f(c: C):
     assert_type(c.get("x"), int | None)
-    "#,
+"#,
 );
 
 // Clearing a TypedDict is not allowed, since doing so would remove keys it's expected to have.
@@ -782,7 +782,7 @@ class C(TypedDict):
     x: int
 def f(c: C):
     c.clear()  # E: no attribute `clear`
-    "#,
+"#,
 );
 
 testcase!(
@@ -801,20 +801,20 @@ class E(TypedDict):
 class F(TypedDict):
     x: int
 def f(c1: C, c2: C, c3: dict[str, int], d: D, e: E, f: F):
-    c1.update(c2) 
+    c1.update(c2)
     c1.update(c3)  # E: No matching overload found for function `C.update`
-    c1.update(d) 
+    c1.update(d)
     c1.update(e)  # E: No matching overload found for function `C.update`
     # This is not ok because `F` could contain `y` with an incompatible type
     c1.update(f) # E: No matching overload found for function `C.update`
     c1.update({"x": 1, "y": 1})
-    c1.update({"x": 1})  
+    c1.update({"x": 1})
     c1.update({"z": 1})  # E: Key `z` is not defined in TypedDict `C`
     c1.update([("x", 1), ("y", 2)])
     c1.update([("z", 3)]) # E: No matching overload found for function `C.update`
     c1.update(x=1, y=2)
     c1.update(z=1) # E: No matching overload found for function `C.update`
-    "#,
+"#,
 );
 
 testcase!(
@@ -824,13 +824,13 @@ from typing import TypedDict
 
 class X[T](TypedDict):
     a: T
-    
+
 def f(x: X[int], y: dict[str, int]):
     x.update(y)  # E: No matching overload found for function `X.update`
-    x.update(x) 
+    x.update(x)
     x.update({"a": 1})
     x.update({"b": 1}) # E: Key `b` is not defined in TypedDict `X`
-    "#,
+"#,
 );
 
 // Test an attribute that should be available on all TypedDict subclasses
@@ -840,7 +840,7 @@ testcase!(
 from typing import TypedDict, assert_type
 class C(TypedDict): ...
 assert_type(C.__total__, bool)
-    "#,
+"#,
 );
 
 testcase!(
@@ -851,7 +851,7 @@ from typing import TypedDict
 class C(TypedDict): ...
 def f(c: C):
     c.__total__  # This should be an error
-    "#,
+"#,
 );
 
 testcase!(
@@ -865,7 +865,7 @@ def f(c: C, s: str):
     c.setdefault("x", 0.0)  # E: No matching overload
     c.setdefault("x")  # E: No matching overload
     c.setdefault(s, 0)  # E: No matching overload
-    "#,
+"#,
 );
 
 testcase!(
@@ -881,7 +881,7 @@ def f(c: C, d: D):
     c.setdefault("x", 0)  # E: `Literal['x']` is not assignable to parameter `k` with type `Never`
     d.setdefault("x", 0)
     d.setdefault("y", "oops")  # E: No matching overload
-    "#,
+"#,
 );
 
 testcase!(
@@ -894,7 +894,7 @@ def f(c: C):
     # Both of these methods take only positional arguments.
     c.get(key="x")  # E: No matching overload
     c.setdefault("x", default=0)  # E: No matching overload
-    "#,
+"#,
 );
 
 testcase!(
@@ -905,7 +905,7 @@ from typing import TypedDict, Required, NotRequired
 class TD(TypedDict):
     x: Required[NotRequired[int]]  # E: Cannot combine `Required` and `NotRequired` for a TypedDict field
     y: NotRequired[Required[int]]  # E: Cannot combine `Required` and `NotRequired` for a TypedDict field
-    "#,
+"#,
 );
 
 testcase!(
@@ -930,7 +930,7 @@ from typing import TypedDict
 class Person(TypedDict):
     name: str
     age: int
-    "#,
+"#,
 );
 
 testcase!(
@@ -944,7 +944,7 @@ def test(x: TypedDict):  # E: `TypedDict` is not allowed in this context
     pass
 
 x: TypedDict  # E: `TypedDict` is not allowed in this context
-    "#,
+"#,
 );
 
 testcase!(

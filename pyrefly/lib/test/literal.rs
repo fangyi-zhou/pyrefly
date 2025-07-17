@@ -102,7 +102,7 @@ testcase!(
     r#"
 from typing import Literal
 Literal[None]
-    "#,
+"#,
 );
 
 testcase!(

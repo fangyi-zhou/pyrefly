@@ -327,7 +327,7 @@ testcase!(
 from typing import Generator
 def f() -> Generator[None, None, int]:  # E: Function declared to return `int` but is missing an explicit `return`
     yield None
-    "#,
+"#,
 );
 
 testcase!(
@@ -337,7 +337,7 @@ from typing import Generator
 def f() -> Generator[None, None, int]:
     yield None
     return "oops"  # E: Returned type `Literal['oops']` is not assignable to declared return type `int`
-    "#,
+"#,
 );
 
 testcase!(
@@ -376,7 +376,7 @@ testcase!(
 from typing import Iterator
 def generator_with_only_yield_from() -> Iterator[int]:
     yield from [1, 2, 3]
-    "#,
+"#,
 );
 
 testcase!(
@@ -393,5 +393,5 @@ def f(start, iterable: Iterable[_T], step) ->  Iterator[_T]:
             yield element # E: Type of yielded value `_T` is not assignable to declared return type `_T`
             next_i += step
 
-    "#,
+"#,
 );

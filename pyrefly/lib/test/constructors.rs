@@ -60,7 +60,7 @@ class A[T]:
         reveal_type(self.x)  # E: revealed type: T
         self.x = 1  # E: `Literal[1]` is not assignable to attribute `x` with type `T`
         self.x = x  # OK
-    "#,
+"#,
 );
 
 testcase!(
@@ -75,7 +75,7 @@ class A[T: int]:
         reveal_type(self.x)  # E: revealed type: T
         self.x = 1  # E: `Literal[1]` is not assignable to attribute `x` with type `T`
         self.x = x  # OK
-    "#,
+"#,
 );
 
 testcase!(
@@ -87,7 +87,7 @@ class A[T]:
     def __init__(self, other: Self):
         reveal_type(other.x)  # E: revealed type: T
         self.x = other.x  # OK
-    "#,
+"#,
 );
 
 testcase!(
@@ -105,7 +105,7 @@ class Box[T]:
 b = Box[int]("hello", "world")
 assert_type(b, Box[int])
 assert_type(b.wrap(True), Box[Box[int]])
-    "#,
+"#,
 );
 
 testcase!(
@@ -117,7 +117,7 @@ class C:
 def test(c: C):
     C(c)  # OK
     C(0)  # E: Argument `Literal[0]` is not assignable to parameter `x` with type `C`
-    "#,
+"#,
 );
 
 // This is the same pyre1 behavior. We infer bivariance here in T1 as well as T2"
@@ -128,9 +128,9 @@ class C[T1]:
     def __init__[T2](self: T2, x: T2):
         pass
 def test(c: C[int]):
-    C[int](c)  
-    C[str](c)  
-    "#,
+    C[int](c)
+    C[str](c)
+"#,
 );
 
 testcase!(
@@ -144,7 +144,7 @@ class C(metaclass=Meta):
 C(5)
 C()     # E: Missing argument `x`
 C("5")  # E: Argument `Literal['5']` is not assignable to parameter `x` with type `int`
-    "#,
+"#,
 );
 
 testcase!(
@@ -158,7 +158,7 @@ class C(metaclass=Meta):
 # Both of these calls error at runtime.
 C()   # E: Missing argument `x`
 C(0)  # E: Expected 0 positional arguments
-    "#,
+"#,
 );
 
 testcase!(
@@ -172,7 +172,7 @@ class C(metaclass=Meta):
     pass
 x = C()
 assert_type(x, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -183,7 +183,7 @@ class C:
 C(5)
 C()     # E: Missing argument `x`
 C("5")  # E: Argument `Literal['5']` is not assignable to parameter `x` with type `int`
-    "#,
+"#,
 );
 
 testcase!(
@@ -196,7 +196,7 @@ class C:
 C(5)
 C()     # E: Missing argument `x` in function `C.__new__`
 C("5")  # E: Argument `Literal['5']` is not assignable to parameter `x` with type `int` in function `C.__new__
-    "#,
+"#,
 );
 
 testcase!(
@@ -218,7 +218,7 @@ GoodChild()  # E: Missing argument `x` in function `GoodChild.__new__`
 # Both of these calls error at runtime.
 BadChild()   # E: Missing argument `x`
 BadChild(0)  # E: Expected 0 positional arguments
-    "#,
+"#,
 );
 
 testcase!(
@@ -230,7 +230,7 @@ class C:
         return 0
 x = C()
 assert_type(x, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -241,7 +241,7 @@ class C[T]:
 C(0)  # T is implicitly Any
 C[bool](True)
 C[bool](0)  # E: Argument `Literal[0]` is not assignable to parameter `x` with type `bool`
-    "#,
+"#,
 );
 
 testcase!(
@@ -254,7 +254,7 @@ class C:
     def __init__(self):
         self.x = 42
 assert_type(C().x, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -265,7 +265,7 @@ class A:
 class B(A): pass
 B(1)
 B("")  # E: Argument `Literal['']` is not assignable to parameter `x` with type `int`
-    "#,
+"#,
 );
 
 testcase!(
@@ -277,7 +277,7 @@ class C:
     @decorator
     def __init__(self): ...
 assert_type(C(), C)
-    "#,
+"#,
 );
 
 testcase!(
@@ -291,7 +291,7 @@ class MyClass(metaclass=Meta):
     def __new__(cls, *args, **kwargs) -> Self:
         return super().__new__(cls, *args, **kwargs)
 assert_type(MyClass(), Never)
-    "#,
+"#,
 );
 
 testcase!(
@@ -306,7 +306,7 @@ class MyClass(metaclass=Meta):
     def __new__(cls, x: int) -> Self:
         return super().__new__(cls)
 MyClass()  # E: Missing argument `x` in function `MyClass.__new__`
-    "#,
+"#,
 );
 
 testcase!(
@@ -321,7 +321,7 @@ class MyClass:
     def __init__(self, x: int):
         pass
 assert_type(MyClass(), Any)
-    "#,
+"#,
 );
 
 testcase!(
@@ -332,7 +332,7 @@ class A:
     def __new__(cls: type[Self]): ...
 A.__new__(A)  # OK
 A.__new__(int)  # E: `type[int]` is not assignable to parameter `cls`
-    "#,
+"#,
 );
 
 testcase!(
@@ -343,7 +343,7 @@ class A:
     def __new__(cls): ...
 A.__new__(A)  # OK
 A.__new__(int)  # Should be an error
-    "#,
+"#,
 );
 
 testcase!(
@@ -351,7 +351,7 @@ testcase!(
     r#"
 class A: pass
 a: A = A.__new__(A)
-    "#,
+"#,
 );
 
 testcase!(
@@ -368,7 +368,7 @@ class Bar:
 
     def bar(self) -> None:
       self()
-    "#,
+"#,
 );
 
 // See https://typing.python.org/en/latest/spec/generics.html#instantiating-generic-classes-and-type-erasure.
@@ -383,7 +383,7 @@ class C2[T: float = int]:
     pass
 assert_type(C1(), C1[Any])
 assert_type(C2(), C2[int])
-    "#,
+"#,
 );
 
 testcase!(
@@ -393,5 +393,5 @@ from typing import assert_type
 class C[T]:
     def __new__[T2](cls, x: T2) -> C[T2]: ...
 assert_type(C(0), C[int])
-    "#,
+"#,
 );

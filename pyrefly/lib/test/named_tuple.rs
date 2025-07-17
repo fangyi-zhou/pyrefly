@@ -24,7 +24,7 @@ assert_type(p[1], str)
 assert_type(p[:2], tuple[int, str])
 p["oops"]  # E: Cannot index into `Pair`
 p.x = 1  # E: Cannot set field `x`
-    "#,
+"#,
 );
 
 testcase!(
@@ -37,7 +37,7 @@ class Pair(NamedTuple):
 p: Pair = Pair(1, "")
 del p.x  # E: Cannot delete field `x`
 del p[0]  # E: Cannot delete item in `Pair`
-    "#,
+"#,
 );
 
 testcase!(
@@ -58,7 +58,7 @@ assert_type(Point4(1, 2).x, Any)
 assert_type(Point5(1, 2).x, int)
 assert_type(Point5(x=1, y=2).x, int)
 assert_type(Point6(1, 2).x, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -71,7 +71,7 @@ NT3 = namedtuple("NT3", ["abc", "def"], rename=True)
 NT4 = namedtuple("NT4", ["def", "ghi"], rename=True)
 NT3(abc="", _1="")
 NT4(_0="", ghi="")
-    "#,
+"#,
 );
 
 testcase!(
@@ -84,7 +84,7 @@ class MyTuple(NamedTuple):
     x: NotRequired[int]  # E: `NotRequired` may only be used for TypedDict members
     y: Required[int]  # E: `Required` may only be used for TypedDict members
     z: ReadOnly[int]  # E: `ReadOnly` may only be used for TypedDict members
-    "#,
+"#,
 );
 
 testcase!(
@@ -92,7 +92,7 @@ testcase!(
     r#"
 from typing import NamedTuple
 Point = NamedTuple('Point', [('x', int), ('x', int)])  # E: Duplicate field `x`
-    "#,
+"#,
 );
 
 testcase!(
@@ -109,7 +109,7 @@ def func3(x: tuple[str, str]) -> None: ...
 func1(p)
 func2(p)
 func3(p)  # E: Argument `Pair` is not assignable to parameter `x` with type `tuple[str, str]` in function `func3
-    "#,
+"#,
 );
 
 testcase!(
@@ -128,7 +128,7 @@ def test(p: Pair):
         case x, y:
             assert_type(x, int)
             assert_type(y, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -146,7 +146,7 @@ class Pair2[T](NamedTuple):
 def test(p: Pair, p2: Pair2[bytes]):
     reveal_type(p.__iter__)  # E: BoundMethod[Pair, (self: Pair) -> Iterable[int | str]]
     reveal_type(p2.__iter__)  # E: BoundMethod[Pair2[bytes], (self: Pair2[bytes]) -> Iterable[bytes | int]]
-    "#,
+"#,
 );
 
 testcase!(
@@ -160,7 +160,7 @@ class Pair(NamedTuple):
 p: Pair = Pair(1, "")
 x1: Sequence[int|str] = p # should succeed
 x2: Sequence[Never] = p # should fail
-    "#,
+"#,
 );
 
 testcase!(
@@ -176,7 +176,7 @@ class Pair2(NamedTuple):
     y: int
 class Pair3(Pair2, Foo):  # E: Named tuples do not support multiple inheritance
     pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -188,7 +188,7 @@ class Pair(NamedTuple):
     y: str = "y"
 Pair(x=5)
 Pair(y="foo")  # E: Missing argument `x` in function `Pair.__new__`
-    "#,
+"#,
 );
 
 testcase!(

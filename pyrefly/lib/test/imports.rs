@@ -249,7 +249,7 @@ fn env_all_x() -> TestEnv {
 __all__ = ["x"]
 x: int = 1
 y: int = 3
-    "#,
+"#,
     )
 }
 
@@ -703,7 +703,7 @@ testcase!(
 from foo import f
 from typing import Any, assert_type
 assert_type(f(), Any)
-    "#,
+"#,
 );
 
 fn env_pyi_docstring() -> TestEnv {
@@ -726,7 +726,7 @@ testcase!(
 from foo import f
 from typing import Any, assert_type
 assert_type(f(), Any)
-    "#,
+"#,
 );
 
 fn env_literal_enum_validity() -> TestEnv {
@@ -761,5 +761,5 @@ testcase!(
     test_relative_import_missing_module_attribute,
     r#"
 from . import foo  # E: Could not find import of `.`
-    "#,
+"#,
 );

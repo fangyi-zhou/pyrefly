@@ -96,7 +96,7 @@ class C(Generic[T]):
 
 c: C[int] = C()
 assert_type(c.x, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -115,7 +115,7 @@ class D(Generic[S], C[list[S]]):
 
 d: D[int] = D()
 assert_type(d.x, list[int])
-    "#,
+"#,
 );
 
 testcase!(
@@ -129,7 +129,7 @@ class B(A[_T]):
     pass
 class C(B[int]):
     pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -150,7 +150,7 @@ x: D[int, str] = D()
 assert_type(x.a, int)
 assert_type(x.b, int)
 assert_type(x.c, str)
-    "#,
+"#,
 );
 
 testcase!(
@@ -165,7 +165,7 @@ class B(A[_T1, int]):
     pass
 class C(B[str]):
     pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -178,7 +178,7 @@ class A(Generic[T]):
     x: T
 def f(a: A):  # TODO: The generic class `A` is missing type arguments.
     assert_type(a.x, Any)
-    "#,
+"#,
 );
 
 testcase!(
@@ -188,7 +188,7 @@ from typing import TypeVar, ParamSpec, TypeVarTuple
 T = TypeVar()  # E: Missing `name` argument
 P = ParamSpec()  # E: Missing `name` argument
 Ts = TypeVarTuple()  # E: Missing `name` argument
-    "#,
+"#,
 );
 
 testcase!(
@@ -198,7 +198,7 @@ from typing import TypeVar, ParamSpec, TypeVarTuple
 T = TypeVar("Z")  # E: TypeVar must be assigned to a variable named `Z`
 P = ParamSpec("Z")  # E: ParamSpec must be assigned to a variable named `Z`
 Ts = TypeVarTuple("Z")  # E: TypeVarTuple must be assigned to a variable named `Z
-    "#,
+"#,
 );
 
 testcase!(
@@ -208,7 +208,7 @@ from typing import TypeVar, ParamSpec, TypeVarTuple
 T = TypeVar(17)  # E: Expected first argument of TypeVar to be a string literal
 P = ParamSpec(17)  # E: Expected first argument of ParamSpec to be a string literal
 Ts = TypeVarTuple(17)  # E: Expected first argument of TypeVarTuple to be a string literal
-    "#,
+"#,
 );
 
 testcase!(
@@ -219,7 +219,7 @@ x = "test"
 T = TypeVar(x)  # E: Expected first argument of TypeVar to be a string literal
 P = ParamSpec(x)  # E: Expected first argument of ParamSpec to be a string literal
 Ts = TypeVarTuple(x)  # E: Expected first argument of TypeVarTuple to be a string literal
-    "#,
+"#,
 );
 
 testcase!(
@@ -229,7 +229,7 @@ from typing import TypeVar, ParamSpec, TypeVarTuple
 T = TypeVar(name = "T")
 P = ParamSpec(name = "P")
 Ts = TypeVarTuple(name = "Ts")
-    "#,
+"#,
 );
 
 testcase!(
@@ -239,7 +239,7 @@ from typing import TypeVar, ParamSpec, TypeVarTuple
 T = TypeVar('T', foo=True)  # E: Unexpected keyword argument `foo`
 P = ParamSpec('P', foo=True)  # E: Unexpected keyword argument `foo`
 Ts = TypeVarTuple('Ts', foo=True)  # E: Unexpected keyword argument `foo`
-    "#,
+"#,
 );
 
 testcase!(
@@ -249,7 +249,7 @@ from typing import TypeVar, ParamSpec, TypeVarTuple
 T = TypeVar('T', **{'a': 'b'})  # E: Cannot pass unpacked keyword arguments to TypeVar
 P = ParamSpec('P', **{'a': 'b'})  # E: Cannot pass unpacked keyword arguments to ParamSpec
 Ts = TypeVarTuple('Ts', **{'a': 'b'})  # E: Cannot pass unpacked keyword arguments to TypeVarTuple
-    "#,
+"#,
 );
 
 testcase!(
@@ -257,7 +257,7 @@ testcase!(
     r#"
 from typing import TypeVar
 T = TypeVar('T', int, bound=int)  # E: TypeVar cannot have both constraints and bound
-    "#,
+"#,
 );
 
 testcase!(
@@ -267,7 +267,7 @@ from typing import TypeVar
 T1 = TypeVar('T1', covariant=True, contravariant=True)  # E: Contradictory variance specifications
 T2 = TypeVar('T2', covariant=True, contravariant=False)
 T3 = TypeVar('T3', covariant="lunch")  # E: Expected literal `True` or `False`
-    "#,
+"#,
 );
 
 testcase!(
@@ -283,7 +283,7 @@ T6 = TypeVar('T6', default='B')  # E: Could not find name `B`
 
 class A:
     pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -294,7 +294,7 @@ class A:
     pass
 T1 = TypeVar('T1', int, A)
 T2 = TypeVar('T2', int, B)  # E: Could not find name `B`
-    "#,
+"#,
 );
 
 testcase!(
@@ -314,7 +314,7 @@ class Child(Base[S], Generic[T, S]):
 def f(c: Child[int, str]):
     assert_type(c.x, str)
     assert_type(c.y, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -334,7 +334,7 @@ class Child(Base[S], Protocol[T, S]):
 def f(c: Child[int, str]):
     assert_type(c.x, str)
     assert_type(c.y, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -358,7 +358,7 @@ def f(c: C[int, str, bool, bytes]):
     assert_type(c.t, str)
     assert_type(c.u, bool)
     assert_type(c.v, bytes)
-    "#,
+"#,
 );
 
 testcase!(
@@ -375,7 +375,7 @@ class C(Generic[T], list[S]):  # E: Class `C` uses type variables not specified 
 def f(c: C[int, str]):
     assert_type(c.t, int)
     assert_type(c[0], str)
-    "#,
+"#,
 );
 
 testcase!(
@@ -389,7 +389,7 @@ class C(Generic[T1, T2]):
 def f9(c1: C[int, str], c2: C[str]):
     assert_type(c1, C[int, str])
     assert_type(c2, C[str, int])
-    "#,
+"#,
 );
 
 testcase!(
@@ -400,7 +400,7 @@ T1 = TypeVar('T1', default=int)
 T2 = TypeVar('T2')
 class C(Generic[T1, T2]):  # E: Type parameter `T2` without a default cannot follow type parameter `T1` with a default
     pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -419,7 +419,7 @@ def f1(c: C[Parent, Child]):
     f2(c)  # E: Argument `C[Parent, Child]` is not assignable to parameter `c` with type `C[Child, Parent]`
 def f2(c: C[Child, Parent]):
     f1(c)
-    "#,
+"#,
 );
 
 // This test exercises an edge case where naively using type analysis on base classes
@@ -437,7 +437,7 @@ class C(list[C[T]]):
 def f(c: C[int]):
     assert_type(c.t, int)
     assert_type(c[0], C[int])
-    "#,
+"#,
 );
 
 testcase!(
@@ -446,7 +446,7 @@ testcase!(
 from typing import Generic
 class C[T](Generic[T]):  # E: Redundant
     pass
-    "#,
+"#,
 );
 
 fn env_exported_type_var() -> TestEnv {
@@ -483,7 +483,7 @@ testcase!(
 from typing import TypeVar
 T = TypeVar("T")
 x: list[T]
-    "#,
+"#,
 );
 
 testcase!(
@@ -492,7 +492,7 @@ testcase!(
 from typing import TypeVar
 T: int = 0
 T = TypeVar('T')  # E: `type[TypeVar[T]]` is not assignable to variable `T` with type `int`
-    "#,
+"#,
 );
 
 testcase!(
@@ -522,7 +522,7 @@ class C[T]: ...
 def append[T](x: C[T], y: T):
     pass
 v: C[int] = C()
-append(v, "test") 
+append(v, "test")
 "#,
 );
 
@@ -561,7 +561,7 @@ class C[T1, T2 = int]:
 def f9(c1: C[int, str], c2: C[str]):
     assert_type(c1, C[int, str])
     assert_type(c2, C[str, int])
-    "#,
+"#,
 );
 
 testcase!(
@@ -573,10 +573,10 @@ class B: ...
 class C[T]: ...
 class D[T = A]: ...
 def f[E](e: type[E]) -> E: ...
-assert_type(f(A), A) 
-assert_type(f(B), B) 
-assert_type(f(C), C[Any]) 
-assert_type(f(D), D) 
+assert_type(f(A), A)
+assert_type(f(B), B)
+assert_type(f(C), C[Any])
+assert_type(f(D), D)
 "#,
 );
 
@@ -588,7 +588,7 @@ class C[T]: pass
 
 x: C        # TODO: The generic class `C` is missing type arguments.
 y: C | int  # TODO: The generic class `C` is missing type arguments.
-    "#,
+"#,
 );
 
 testcase!(
@@ -607,7 +607,7 @@ def f(a: A[int]):
 
 def g(a: A):
     assert_type(a.x, float)
-    "#,
+"#,
 );
 
 testcase!(
@@ -627,7 +627,7 @@ class B(Generic[T3]):  # E: Default of type parameter `T3` refers to out-of-scop
 
 def f(a: A):
     assert_type(a.x, Any)
-    "#,
+"#,
 );
 
 testcase!(
@@ -643,7 +643,7 @@ class B[S = T]: pass # E: out-of-scope type parameter `T`
 def f(a1: A[int], a2: A):
     assert_type(a1, A[int, int])
     assert_type(a2, A[float, float])
-    "#,
+"#,
 );
 
 testcase!(
@@ -654,7 +654,7 @@ class A[T1 = float, T2 = list[T1]]: pass
 def f(a1: A[int], a2: A):
     assert_type(a1, A[int, list[int]])
     assert_type(a2, A[float, list[float]])
-    "#,
+"#,
 );
 
 // Test that we get the most precise type arguments we can even in the presence of errors.
@@ -666,7 +666,7 @@ class A[T1, T2 = int, T3, T4 = T1]:  # E: `T3` without a default cannot follow t
     pass
 def f(a: A[str]):  # E: Expected 4 type arguments for `A`, got 1
     assert_type(a, A[str, int, Any, str])
-    "#,
+"#,
 );
 
 // This isn't allowed because it's ambiguous how many type arguments the TypeVarTuple consumes.
@@ -678,14 +678,14 @@ class A[*Ts, T = int]:  # E: TypeVar `T` with a default cannot follow TypeVarTup
     pass
 class B[*Ts, T1, T2 = T1]:  # E: TypeVar `T2` with a default cannot follow TypeVarTuple `Ts`
     pass
-assert_type(B[int](), B[*tuple[()], int, int]) 
+assert_type(B[int](), B[*tuple[()], int, int])
 assert_type(B[int, str](), B[*tuple[()], int, str])
 assert_type(B[int, str, float, bool, bytes](), B[int, str, float, bool, bytes])
 # It doesn't matter too much how we fill in the type arguments when they aren't
 # pinned by construction, as long as it's plausible.
 reveal_type(B()) # E: revealed type: B[@_, @_, @_]
 b: B[tuple[tuple[Any, ...], Any, Any]] = B()  # Here's one valid way to pin them
-    "#,
+"#,
 );
 
 testcase!(
@@ -696,11 +696,11 @@ class A[*Ts, **P1, **P2 = P1]:
     pass
 class B[*Ts, T, **P = [int, str]]:
     pass
-assert_type(A[[int, str]](), A[*tuple[()], [int, str], [int, str]]) 
+assert_type(A[[int, str]](), A[*tuple[()], [int, str], [int, str]])
 assert_type(A[bool, [int, str]](),  A[bool, [int, str], [int, str]])
-assert_type(A[bool, bytes, [int, str]](), A[bool, bytes, [int, str], [int, str]]) 
+assert_type(A[bool, bytes, [int, str]](), A[bool, bytes, [int, str], [int, str]])
 assert_type(B[int, str, float](), B[int, str, float, [int, str]])
-    "#,
+"#,
 );
 
 testcase!(
@@ -736,7 +736,7 @@ o2a = curry(42, 'bar')
 
 bad_curry = partial(many_params, 1, 'a', 2, 'b', 3, 'c', 4, 'd')
 o2b = bad_curry(7, 11)
-    "#,
+"#,
 );
 
 testcase!(
@@ -749,7 +749,7 @@ Qs = TypeVarTuple('Qs', default=Unpack[Ps])
 # without any additional error.
 class A[*Ps, *Qs = *Ps]: # E: cannot be more than one TypeVarTuple
     pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -781,7 +781,7 @@ from typing import TypeVar, Generic
 _b = TypeVar("_b", bool, int)
 class F(Generic[_b]):
     def f(self, b: _b = True) -> _b: ...
-    "#,
+"#,
 );
 
 testcase!(
@@ -810,7 +810,7 @@ class C(Generic[oops]):  # E:
     pass
 def f(c: C[int]):
     pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -821,7 +821,7 @@ if typing.TYPE_CHECKING: ...
 T = typing.TypeVar('T')
 class C(typing.Generic[T]):
     pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -844,7 +844,7 @@ class C3(Generic[T]):
 
 class C4(Generic[int]):  # E: Expected a type variable, got `int`
     pass
-    "#,
+"#,
 );
 
 // Test various things that we should allow `type` to be specialized with
@@ -867,7 +867,7 @@ def f(x: type[T1]) -> T1:
 
 def g[T2](x: type[T2]) -> T2:
     return x()
-    "#,
+"#,
 );
 
 testcase!(

@@ -428,6 +428,12 @@ pub fn testcase_for_macro(
     if !env.modules.is_empty() {
         start_line += 1;
     }
+    for (line, line_no) in contents.lines().zip(0..) {
+        if line.ends_with(' ') {
+            // complain about trailing whitespace
+            return Err(anyhow!("Trailing whitespace in test case at {}:{}: `{}`", file, start_line + line_no, line));
+        }
+    }
     let contents = format!("{}{}", "\n".repeat(start_line), contents);
     env.add_with_path("main", file, &contents);
     // If any given test regularly takes > 10s, that's probably a bug.

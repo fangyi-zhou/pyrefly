@@ -20,7 +20,7 @@ class C:
     x: int
 C(x=0)
 C(x="oops")  # E: `Literal['oops']` is not assignable to parameter `x` with type `int`
-    "#,
+"#,
 );
 
 testcase!(
@@ -35,7 +35,7 @@ class D(C):
     x: int
 D(x=0)
 D(x="oops")  # E: `Literal['oops']` is not assignable to parameter `x` with type `int`
-    "#,
+"#,
 );
 
 testcase!(
@@ -51,7 +51,7 @@ class D(C):
 class E(D):
     y: str
 E(x=0, y="")
-    "#,
+"#,
 );
 
 testcase!(
@@ -67,7 +67,7 @@ class D(C):
     x: int
 D(x=0)
 D(x="oops")  # E: `Literal['oops']` is not assignable to parameter `x` with type `int`
-    "#,
+"#,
 );
 
 testcase!(
@@ -83,7 +83,7 @@ class C:
     x: int
 C(x=0)
 C(x="oops")  # E: `Literal['oops']` is not assignable to parameter `x` with type `int`
-    "#,
+"#,
 );
 
 testcase!(
@@ -113,7 +113,7 @@ def f(mut1: Mutable1, mut2: Mutable2, froz1: Frozen1, froz2: Frozen2):
     mut2.x = 42
     froz1.x = 42  # E: frozen dataclass member
     froz2.x = 42  # E: frozen dataclass member
-    "#,
+"#,
 );
 
 testcase!(
@@ -126,7 +126,7 @@ class Data(Base, frozen=True):
     x: int
 data = Data(x=0)
 data.x = 42  # E: frozen dataclass member
-    "#,
+"#,
 );
 
 testcase!(
@@ -141,7 +141,7 @@ class C:
     x: int = field()
 C(x=0)
 C()  # E: Missing argument `x`
-    "#,
+"#,
 );
 
 testcase!(
@@ -156,7 +156,7 @@ class C:
     x: int = field(factory=int)
 C(x=0)
 C()  # OK because `factory` gives `x` a default
-    "#,
+"#,
 );
 
 testcase!(
@@ -171,7 +171,7 @@ class C:
     x: int = my_field(alias="not_my_x")
 c = C(not_my_x=0)
 assert_type(c.x, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -192,7 +192,7 @@ class C:
     x: int = field()
     y: str = field(name='y')
 C(y='hello world')
-    "#,
+"#,
 );
 
 testcase!(
@@ -207,7 +207,7 @@ class C:
     x: int = field()
 C(x=0)
 C(0)  # E: Expected argument `x` to be passed by name
-    "#,
+"#,
 );
 
 testcase!(
@@ -224,7 +224,7 @@ class C:
     x: str = my_field(converter=int_to_str)
 C(x=0)
 C(x="oops")  # E: `Literal['oops']` is not assignable to parameter `x` with type `int`
-    "#,
+"#,
 );
 
 testcase!(
@@ -242,7 +242,7 @@ class C:
 c = C(x=0)
 c.x = 42
 c.x = "oops"  # E: `Literal['oops']` is not assignable to attribute `x` with type `int`
-    "#,
+"#,
 );
 
 testcase!(
@@ -261,7 +261,7 @@ class Data:
     x: Converter = my_field(converter=Converter)
 Data(x=0)
 Data(x=Converter(0))  # E: `Converter` is not assignable to parameter `x` with type `int`
-    "#,
+"#,
 );
 
 testcase!(
@@ -298,7 +298,7 @@ class Data2:
 Data2(x=b"")
 Data2(x="")
 Data2(x=0)  # E: `Literal[0]` is not assignable to parameter `x` with type `bytes | str`
-    "#,
+"#,
 );
 
 testcase!(
@@ -316,5 +316,5 @@ class NotConvertibleToInt: ...
 
 Data(x="42")
 Data(x=NotConvertibleToInt())  # E: `NotConvertibleToInt` is not assignable to parameter `x`
-    "#,
+"#,
 );

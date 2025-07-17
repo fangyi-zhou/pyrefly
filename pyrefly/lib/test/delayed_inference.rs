@@ -114,7 +114,7 @@ def bar(random: bool):
     else:
         x = foo([1])
     assert_type(x, int | Any)
-    "#,
+"#,
 );
 
 testcase!(
@@ -126,7 +126,7 @@ class Box[T]:
 b = Box()
 b.x = 1
 assert_type(b, Box[int])
-    "#,
+"#,
 );
 
 testcase!(

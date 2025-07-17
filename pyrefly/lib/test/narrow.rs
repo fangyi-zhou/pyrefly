@@ -15,7 +15,7 @@ def f(x: str | None):
     if x is None:
         assert_type(x, None)
     assert_type(x, str | None)
-    "#,
+"#,
 );
 
 testcase!(
@@ -29,7 +29,7 @@ def f(x: str | None, y: bool):
         assert_type(y, Literal[True])
     else:
         assert_type(y, Literal[False])
-    "#,
+"#,
 );
 
 testcase!(
@@ -39,7 +39,7 @@ from typing import assert_type
 def f(x: str | None):
     if bool(x):
         assert_type(x, str)
-    "#,
+"#,
 );
 
 testcase!(
@@ -52,7 +52,7 @@ def f(x: bool):
         assert_type(x, bool)  # should be Literal[True]
     else:
         assert_type(x, bool)  # should be Literal[False]
-    "#,
+"#,
 );
 
 testcase!(
@@ -62,7 +62,7 @@ from typing import assert_type
 def f(x: str | None):
     if x == None:
         assert_type(x, None)
-    "#,
+"#,
 );
 
 testcase!(
@@ -72,7 +72,7 @@ from typing import assert_type
 def f(x: str | None):
     if x != None:
         assert_type(x, str)
-    "#,
+"#,
 );
 
 testcase!(
@@ -82,7 +82,7 @@ from typing import assert_type
 def f(x: str | None):
     if x is not None:
         assert_type(x, str)
-    "#,
+"#,
 );
 
 testcase!(
@@ -94,7 +94,7 @@ def f(x: str | None):
         assert_type(x, None)
     else:
         assert_type(x, str)
-    "#,
+"#,
 );
 
 testcase!(
@@ -106,7 +106,7 @@ class B(A): pass
 def f(x: type[A]):
     if x is B:
         assert_type(x, type[B])
-    "#,
+"#,
 );
 
 testcase!(
@@ -116,7 +116,7 @@ from typing import assert_type, Never
 def f(x: str):
     if x is None:
         assert_type(x, Never)
-    "#,
+"#,
 );
 
 testcase!(
@@ -129,7 +129,7 @@ def f1(x: bool):
 def f2(x: Literal[True] | str):
     if x is not True:
         assert_type(x, str)
-    "#,
+"#,
 );
 
 testcase!(
@@ -146,7 +146,7 @@ def f1(x: Literal[E.X, E.Y]):
 def f2(x: E | int):
     if x is not E.X:
         assert_type(x, Literal[E.Y] | int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -165,7 +165,7 @@ def f(x: E):
        assert_type(x, Literal[E.Y])
     else:
        assert_type(x, Literal[E.Z])
-    "#,
+"#,
 );
 
 testcase!(
@@ -181,7 +181,7 @@ def f1(x: type[A] | type[B]):
         # Note that we cannot narrow to `type[B]` here, as `type` is covariant and `x` may be a
         # subtype of `A`.
         assert_type(x, type[A] | type[B])
-    "#,
+"#,
 );
 
 testcase!(
@@ -193,7 +193,7 @@ def f(x: bool | None):
         assert_type(x, Never)
     else:
         assert_type(x, bool | None)
-    "#,
+"#,
 );
 
 testcase!(
@@ -204,7 +204,7 @@ def f(x: bool | None, y: bool | None):
     if x is True and y is False:
         assert_type(x, Literal[True])
         assert_type(y, Literal[False])
-    "#,
+"#,
 );
 
 testcase!(
@@ -216,7 +216,7 @@ def f(x: bool | None):
         assert_type(x, Literal[True] | None)
     else:
         assert_type(x, Literal[False])
-    "#,
+"#,
 );
 
 testcase!(
@@ -233,7 +233,7 @@ def f(x: str | None, y: int | None):
     else:
         assert_type(x, str)
         assert_type(y, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -249,7 +249,7 @@ def f(x: str | None):
         assert_type(x, str | None)
     else:
         assert_type(x, str)
-    "#,
+"#,
 );
 
 testcase!(
@@ -274,7 +274,7 @@ def test_os_exit(x: str | None):
     if not x:
         os._exit(1)
     assert_type(x, str)
-    "#,
+"#,
 );
 
 testcase!(
@@ -284,7 +284,7 @@ from typing import assert_type, Literal
 def f(x: bool | None):
     if not (x is True and x is None):
         assert_type(x, Literal[False] | bool | None)
-    "#,
+"#,
 );
 
 testcase!(
@@ -294,7 +294,7 @@ from typing import assert_type
 def f(x: str | None):
     assert x is not None
     assert_type(x, str)
-    "#,
+"#,
 );
 
 testcase!(
@@ -310,7 +310,7 @@ while x is None:
 else:
     assert_type(x, str)
 assert_type(x, str)
-    "#,
+"#,
 );
 
 testcase!(
@@ -322,7 +322,7 @@ x = f()
 while x is None:
     break
 assert_type(x, str | None)
-    "#,
+"#,
 );
 
 testcase!(
@@ -337,7 +337,7 @@ while x is None:
 else:
     assert_type(x, str)
 assert_type(x, str | None)
-    "#,
+"#,
 );
 
 testcase!(
@@ -351,7 +351,7 @@ while x is None:
         x = 42
         break
 assert_type(x, Literal[42] | str)
-    "#,
+"#,
 );
 
 testcase!(
@@ -364,7 +364,7 @@ def test(x: bool, z: bool):
     while y := z:
         assert_type(y, Literal[True])
         assert_type(z, Literal[True])
-    "#,
+"#,
 );
 testcase!(
     test_nested_function,
@@ -374,7 +374,7 @@ def foo(x: int | None) -> None:
     def include():
         if x is not None:
             assert_type(x, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -386,7 +386,7 @@ def f(x: bool | None, y: bool | None):
         assert_type(x, None)
     if y is None is True:
         assert_type(y, Never)
-    "#,
+"#,
 );
 
 testcase!(
@@ -398,7 +398,7 @@ x = f()
 class C:
     if x is None:
         assert_type(x, None)
-    "#,
+"#,
 );
 
 testcase!(
@@ -409,7 +409,7 @@ def f() -> str | None:
     pass
 if x := f():
     assert_type(x, str)
-    "#,
+"#,
 );
 
 testcase!(
@@ -420,7 +420,7 @@ def f(x: int | None):
     if y := x:
         assert_type(x, int)
         assert_type(y, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -431,7 +431,7 @@ def f() -> str | None:
     pass
 if (x := f()) is None:
     assert_type(x, None)
-    "#,
+"#,
 );
 
 testcase!(
@@ -441,7 +441,7 @@ from typing import assert_type
 def f(xs: list[int | None]):
     ys = [y111 for x in xs if (y111 := x)]
     assert_type(ys, list[int])
-    "#,
+"#,
 );
 
 testcase!(
@@ -453,7 +453,7 @@ def get_y(x: int | None) -> int | None:
 def f(xs: list[int | None]):
     ys = [y111 for x in xs if (y111 := get_y(x))]
     assert_type(ys, list[int])
-    "#,
+"#,
 );
 
 testcase!(
@@ -467,7 +467,7 @@ foos: Sequence[int] = tuple(
     for x in range(10)
     if (maybe_foo := foo(x)) is not None
 )
-    "#,
+"#,
 );
 
 testcase!(
@@ -479,7 +479,7 @@ def get_y(x: int | None) -> int | None:
 def f(x: int | None):
     val = y if (y := get_y(x)) else 0
     assert_type(val, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -499,7 +499,7 @@ def f(e: E):
             assert_type(e, Literal[E.Y])
         case _:
             assert_type(e, Literal[E.Z])
-    "#,
+"#,
 );
 
 testcase!(
@@ -512,7 +512,7 @@ def f(e: bool | None):
             assert_type(e, Literal[True] | None)
         case _:
             assert_type(e, Literal[False])
-    "#,
+"#,
 );
 
 testcase!(
@@ -524,7 +524,7 @@ def f(x: str | None, y: int):
     assert_type(x, str | None)
     assert_type(y, int)
     assert_type(z, str | int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -537,7 +537,7 @@ class E(enum.Enum):
 def f(x: Literal[E.X], y: E):
     if x is y:
         assert_type(x, Literal[E.X])
-    "#,
+"#,
 );
 
 testcase!(
@@ -549,7 +549,7 @@ def f(x: str | int):
         assert_type(x, str)
     else:
         assert_type(x, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -574,7 +574,7 @@ def verify_type(input: int):
 def foo(x: int | None) -> None:
     assert type(x) is int
     verify_type(x)
-    "#,
+"#,
 );
 
 testcase!(
@@ -586,7 +586,7 @@ def f(x: str | int | None):
         assert_type(x, str | int)
     else:
         assert_type(x, None)
-    "#,
+"#,
 );
 
 testcase!(
@@ -629,7 +629,7 @@ def f(x: str | int | None):
         assert_type(x, str | int)
     else:
         assert_type(x, None)
-    "#,
+"#,
 );
 
 testcase!(
@@ -670,7 +670,7 @@ def f(x: type[A | B | C]):
         assert_type(x, type[A] | type[B])
     else:
         assert_type(x, type[C])
-    "#,
+"#,
 );
 
 testcase!(
@@ -685,7 +685,7 @@ def f(x: type[A | B | C]):
         assert_type(x, type[A] | type[B])
     else:
         assert_type(x, type[C])
-    "#,
+"#,
 );
 
 testcase!(
@@ -696,7 +696,7 @@ X = int
 def f(x: str | int):
     if isinstance(x, X):
         assert_type(x, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -712,7 +712,7 @@ def f(x: A) -> X:
     if isinstance(x, X):
         return x
     raise ValueError()
-    "#,
+"#,
 );
 
 // Using scoped type aliases with isinstance is a runtime error.
@@ -723,7 +723,7 @@ type X = int
 type Y = int | str
 isinstance(1, X)  # E: Expected class object
 isinstance(1, Y)  # E: Expected class object
-    "#,
+"#,
 );
 
 testcase!(
@@ -734,7 +734,7 @@ def f(x: int | list[int]):
     if isinstance(x, list[int]):  # E: Expected class object
         # Either `int | list[int]` or `list[int]` is acceptable for the narrowed type.
         assert_type(x, list[int])
-    "#,
+"#,
 );
 
 testcase!(
@@ -746,7 +746,7 @@ def f(x: int | list[int], y: type[list[int]]):
     # `y` may be a class object at runtime.
     if isinstance(x, y):
         assert_type(x, list[int])
-    "#,
+"#,
 );
 
 testcase!(
@@ -755,7 +755,7 @@ testcase!(
     r#"
 def f(x, y: list[type[list[int]]]):
     return isinstance(x, y[0])  # E: Expected class object
-    "#,
+"#,
 );
 
 testcase!(
@@ -766,7 +766,7 @@ istype = isinstance
 def f(x: int | str):
     if istype(x, int):
         assert_type(x, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -778,7 +778,7 @@ class B:
     pass
 def f(x: A | B):
     return isinstance(x, A) and x.x
-    "#,
+"#,
 );
 
 testcase!(
@@ -788,7 +788,7 @@ class A:
     x: str
 def f(x: A | None):
     return x is None or x.x
-    "#,
+"#,
 );
 
 testcase!(
@@ -803,7 +803,7 @@ def test(x: A | B):
     y = isinstance(x, A) and (z := True)
     assert_type(x, A | B)
     assert_type(z, Literal[True])
-    "#,
+"#,
 );
 
 testcase!(
@@ -822,7 +822,7 @@ def f(x: Cat | Dog):
     else:
         assert_type(x, Cat | Dog)
     is_black_cat(1)  # E: Argument `Literal[1]` is not assignable to parameter `x` with type `Cat | Dog` in function `is_black_cat`
-    "#,
+"#,
 );
 
 testcase!(
@@ -840,7 +840,7 @@ def f(x: Cat | Dog):
         assert_type(x, Cat)
     else:
         assert_type(x, Dog)
-    "#,
+"#,
 );
 
 testcase!(
@@ -861,7 +861,7 @@ def f(x:  A | B | C, y: A | C):
         assert_type(y, A)
     else:
         assert_type(y, C)
-    "#,
+"#,
 );
 
 testcase!(
@@ -886,7 +886,7 @@ def f(x: type[B] | type[int]):
         assert_type(x, type[B])
     else:
         assert_type(x, type[int])
-    "#,
+"#,
 );
 
 testcase!(
@@ -895,7 +895,7 @@ testcase!(
 def f(x: int):
     if issubclass(x, int):  # E: Argument `int` is not assignable to parameter `cls` with type `type`
         return True
-    "#,
+"#,
 );
 
 testcase!(
@@ -908,7 +908,7 @@ class C:
 def f(c: C, x: int | str):
     if c.is_positive_int(x):
         assert_type(x, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -922,7 +922,7 @@ def g(x: int | str):
         assert_type(x, int)
     if f2(x, ""):
         assert_type(x, str)
-    "#,
+"#,
 );
 
 testcase!(
@@ -933,7 +933,7 @@ def f(x: int | None):
     if not x:
         return
     assert_type(x, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -972,7 +972,7 @@ def foo(x: int | str):
     y = 42
     assert_type(x, Literal[42])
     assert_type(y, Literal[42])
-    "#,
+"#,
 );
 
 testcase!(
@@ -983,7 +983,7 @@ def f(x) -> TypeGuard[str]:
     return "oops"  # E: Returned type `Literal['oops']` is not assignable to expected return type `bool` of type guard functions
 def g(x) -> TypeGuard[str]:  # E: Function declared to return `TypeGuard[str]` but is missing an explicit `return`
     pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -993,7 +993,7 @@ from typing import Any
 def f(x: int | str, y: Any):
     if isinstance(x, y):
         pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -1003,7 +1003,7 @@ from typing import Any
 def f(x: int | str):
     if isinstance(x, Any): # E: Expected class object, got `Any`
         pass
-    "#,
+"#,
 );
 
 testcase!(
@@ -1029,7 +1029,7 @@ def f(x: list[C], z: C):
         pass
     [y for y in x if (accepts_d(y) and isinstance(y, D))]  # E: Argument `C` is not assignable to parameter `x` with type `D` in function `accepts_d`
     [None for y in x if C.error]  # E: Class `C` has no class attribute `error`
-    "#,
+"#,
 );
 
 testcase!(
@@ -1154,7 +1154,7 @@ def f(x):
     return isinstance(x, list[int])  # E: Expected class object
 def g(x):
     return issubclass(x, list[int])  # E: Expected class object
-    "#,
+"#,
 );
 
 testcase!(
@@ -1165,7 +1165,7 @@ def f[T](x, y: type[T]) -> T:
     if isinstance(x, y):
         return x
     raise ValueError()
-    "#,
+"#,
 );
 
 testcase!(
@@ -1175,7 +1175,7 @@ from typing import Self, TypeGuard
 class A:
     def f(self, x) -> TypeGuard[Self]:
         return isinstance(x, type(self))
-    "#,
+"#,
 );
 
 testcase!(
@@ -1366,7 +1366,7 @@ def f(a_type, handlers, type2):
     for _ in handlers:
         if issubclass(a_type, type2):
             pass
-    "#,
+"#,
 );
 
 testcase!(

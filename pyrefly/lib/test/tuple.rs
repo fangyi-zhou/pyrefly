@@ -88,7 +88,7 @@ class Base4(tuple[str, int]): ...
 class Child1(Base1, Base2): ...
 class Child2(Base1, Base3): ...
 class Child3(Base3, Base4): ...  # E: Cannot extend multiple incompatible tuples
-class Child4(Base2, Base3): ...  # E: Cannot extend multiple incompatible tuples 
+class Child4(Base2, Base3): ...  # E: Cannot extend multiple incompatible tuples
 "#,
 );
 
@@ -241,7 +241,7 @@ testcase!(
     r#"
 x1: tuple[str, ...] = ("ok",)
 x2: tuple[int, ...] = ("err",)  # E: `tuple[Literal['err']]` is not assignable to `tuple[int, ...]`
-    "#,
+"#,
 );
 
 testcase!(
@@ -253,7 +253,7 @@ x2: Iterable = ("ok",)
 x3: object = ("ok",)
 x4: Iterable[int] = ("err",)  # E: `tuple[Literal['err']]` is not assignable to `Iterable[int]`
 x5: list[int] = ("err",)  # E: `tuple[Literal['err']]` is not assignable to `list[int]`
-    "#,
+"#,
 );
 
 testcase!(
@@ -261,7 +261,7 @@ testcase!(
     r#"
 from typing import Iterable
 x: Iterable[str] = ()
-    "#,
+"#,
 );
 
 testcase!(
@@ -274,7 +274,7 @@ assert_type(x, int | bool)
 assert_type(y, str | bool)
 
 (x, y, z) = f()  # E: Cannot unpack
-    "#,
+"#,
 );
 
 testcase!(
@@ -284,7 +284,7 @@ from typing import assert_type
 def f() -> tuple[int, str] | tuple[bool, ...]: ...
 for x in f():
     assert_type(x, int | bool | str)
-    "#,
+"#,
 );
 
 testcase!(
@@ -299,7 +299,7 @@ for x in C1():
     assert_type(x, int)
 for x in C2():
     assert_type(x, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -419,5 +419,5 @@ from typing import Any
 
 def f(x: type[tuple[Any, ...]]):
     return x() # Ok
-    "#,
+"#,
 );

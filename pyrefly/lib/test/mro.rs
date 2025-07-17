@@ -222,5 +222,5 @@ class A[T]:
     pass
 f(A)
 f(A[int])
-    "#,
+"#,
 );

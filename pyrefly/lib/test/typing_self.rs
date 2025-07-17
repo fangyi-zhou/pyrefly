@@ -37,7 +37,7 @@ class B(A):
     pass
 assert_type(B().f(), B)
 assert_type(B().g(), type[B])
-    "#,
+"#,
 );
 
 testcase!(
@@ -52,7 +52,7 @@ class B(A):
 def f(a: A, b: B):
     b.f(b)  # OK
     b.f(a)  # E:
-    "#,
+"#,
 );
 
 testcase!(
@@ -66,7 +66,7 @@ class B(A):
     pass
 B(B)  # OK
 B(A)  # E:
-    "#,
+"#,
 );
 
 testcase!(
@@ -77,7 +77,7 @@ class A:
     def f(self: Self) -> Self:
         assert_type(self, Self)
         return self
-    "#,
+"#,
 );
 
 testcase!(
@@ -109,7 +109,7 @@ assert_type(B().x, B)  # E: assert_type(Self, B)
 # purposes
 assert_type(A().x.y, int)
 assert_type(B().x.y, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -122,7 +122,7 @@ class A:
     y: int
 class B(A):
     pass
-# 
+#
 # Similar issues here to the test above; we need Self to be more type-var
 # like and play better with inheritance.
 assert_type(A.x, A)  # E: assert_type(Self, A)
@@ -131,5 +131,5 @@ assert_type(B.x, B)  # E: assert_type(Self, B)
 # But again, quite a few of the desired behaviors are present.
 assert_type(A.x.y, int)
 assert_type(B.x.y, int)
-    "#,
+"#,
 );

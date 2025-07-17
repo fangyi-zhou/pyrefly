@@ -738,7 +738,7 @@ def foo(x: str | int) -> str | int:
 
 def bar(x: int) -> int: ...
 def bar(x: str) -> str: ...
-            "#,
+"#,
         );
         assert_import_all(&defs, &[]);
         assert_definition_names(&defs, &["overload", "foo", "bar"]);
@@ -768,7 +768,7 @@ __all__.extend(['a', 'b'])
 __all__.extend(foo.__all__)
 __all__.append('a')
 __all__.remove('r')
-        "#,
+"#,
         );
         assert_import_all(&defs, &["foo"]);
         assert_definition_names(&defs, &["a", "b", "__all__"]);

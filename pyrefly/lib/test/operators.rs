@@ -87,7 +87,7 @@ from typing import assert_type
 def f(x: int, y: str) -> None:
     z = x or y
     assert_type(z, int | str)
-    "#,
+"#,
 );
 
 testcase!(
@@ -108,7 +108,7 @@ def f(a: None, b: int, c: str, cond: bool) -> None:
         b2 = b
     d = b2 or c
     assert_type(d, int | str)
-    "#,
+"#,
 );
 
 testcase!(
@@ -117,7 +117,7 @@ testcase!(
 from typing import assert_type, Literal
 x = True or False
 assert_type(x, Literal[True])
-    "#,
+"#,
 );
 
 testcase!(
@@ -126,7 +126,7 @@ testcase!(
 from typing import assert_type, Literal
 x = 1 or 0
 assert_type(x, Literal[1])
-    "#,
+"#,
 );
 
 testcase!(
@@ -135,7 +135,7 @@ testcase!(
 from typing import assert_type, Literal
 x = "a" or ""
 assert_type(x, Literal["a"])
-    "#,
+"#,
 );
 
 testcase!(
@@ -146,7 +146,7 @@ from typing import assert_type, Literal
 def f(x: int, y: str) -> None:
     z = x and y
     assert_type(z, Literal[0] | str)
-    "#,
+"#,
 );
 
 testcase!(
@@ -158,7 +158,7 @@ assert_type(x, Literal[False])
 
 y = True and True
 assert_type(y, Literal[True])
-    "#,
+"#,
 );
 
 testcase!(
@@ -167,7 +167,7 @@ testcase!(
 from typing import assert_type, Literal
 x = False and True
 assert_type(x, Literal[False])
-    "#,
+"#,
 );
 
 testcase!(
@@ -176,7 +176,7 @@ testcase!(
 from typing import assert_type, Literal
 x = 0 and 1
 assert_type(x, Literal[0])
-    "#,
+"#,
 );
 
 testcase!(
@@ -185,7 +185,7 @@ testcase!(
 from typing import assert_type, Literal
 x = "" and "a"
 assert_type(x, Literal[""])
-    "#,
+"#,
 );
 
 testcase!(
@@ -223,7 +223,7 @@ from typing import assert_type
 def f(x):
     y = not x
     assert_type(y, bool)
-    "#,
+"#,
 );
 
 testcase!(
@@ -254,7 +254,7 @@ assert_type(y5, Literal[False])
 x6 = ""
 y6 = not x6
 assert_type(y6, Literal[True])
-    "#,
+"#,
 );
 
 testcase!(
@@ -272,7 +272,7 @@ c = C()
 assert_type(+c, Literal[5])
 assert_type(-c, Literal[-5])
 assert_type(~c, Literal[100])
-    "#,
+"#,
 );
 
 testcase!(
@@ -285,7 +285,7 @@ class A:
     def __invert__(self, extra_arg):
         pass
 ~A()  # E: Unary `~` is not supported on `A`\n  Missing argument `extra_arg` in function `A.__invert__`
-    "#,
+"#,
 );
 
 testcase!(
@@ -300,7 +300,7 @@ class B(Enum):
         return 0
 +A.X  # E: Unary `+` is not supported on `Literal[A.X]`
 +B.X  # OK
-    "#,
+"#,
 );
 
 testcase!(
@@ -338,7 +338,7 @@ class A:
         return other
 def f(x: int, y: int | A) -> None:
     x += y
-    "#,
+"#,
 );
 
 testcase!(
@@ -347,7 +347,7 @@ testcase!(
 from typing import Any, assert_type
 def f(x: Any):
     assert_type(-x, Any)
-    "#,
+"#,
 );
 
 testcase!(
@@ -362,7 +362,7 @@ def f(x: Any):
 def f2(x: int | Any):
     assert_type(1 + x, int | Any)
     assert_type(x < 10,  bool | Any )
-    "#,
+"#,
 );
 
 testcase!(
@@ -370,9 +370,9 @@ testcase!(
     r#"
 from typing import TypeVar, reveal_type
 T_co = TypeVar("T_co", covariant=True)
-T_co == int 
+T_co == int
 reveal_type(T_co) # E:  revealed type: type[TypeVar[T_co]]
-    "#,
+"#,
 );
 
 testcase!(
@@ -383,7 +383,7 @@ class A:
   def __lt__(self, other):
     return 1
 assert_type(A() < A(), Literal[1])
-    "#,
+"#,
 );
 
 testcase!(
@@ -394,7 +394,7 @@ class A:
 class B:
     pass
 A() + B()  # E: Cannot find `__add__` or `__radd__`
-    "#,
+"#,
 );
 
 // Both __add__ and __radd__ are tried, but it's less confusing to use __add__ when both fail.
@@ -410,7 +410,7 @@ class B:
         return self
 a = A() + B()  # E: `B` is not assignable to parameter `other` with type `Never` in function `A.__add__`
 assert_type(a, A)
-    "#,
+"#,
 );
 
 // We try __iadd__ and some fallback dunders. When all fail, the least confusing option is to use __iadd__.
@@ -426,7 +426,7 @@ class B:
         return self
 a = A()
 a += B()  # E: `B` is not assignable to parameter `other` with type `Never` in function `A.__iadd__`
-    "#,
+"#,
 );
 
 testcase!(
@@ -437,7 +437,7 @@ class A:
     def __eq__(self, other) -> int:
         return 1
 assert_type(A() == 42, int)
-    "#,
+"#,
 );
 
 testcase!(
@@ -445,7 +445,7 @@ testcase!(
     r#"
 'x' in (x for x in ['y'])
 42 in (x for x in ['y'])  # E: `in` is not supported between `Literal[42]` and `Generator[str, None, None]`
-    "#,
+"#,
 );
 
 testcase!(
@@ -457,5 +457,5 @@ class C:
         return self
     def f(self) -> Self:
         return -self
-    "#,
+"#,
 );

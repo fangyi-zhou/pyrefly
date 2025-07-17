@@ -23,23 +23,23 @@ isinstance(u2, UserId) # E: NewType `UserId` not allowed in isinstance
 
 class UserIdDerived(UserId): # E: Subclassing a NewType not allowed
     pass
-     "#,
+"#,
 );
 
 testcase!(
     test_new_type_naming,
     r#"
-from typing import NewType 
+from typing import NewType
 
-GoodName = NewType("BadName", int) # E: Expected string literal "GoodName"  
+GoodName = NewType("BadName", int) # E: Expected string literal "GoodName"
 
-GoodNewType1 = NewType("GoodNewType1", list)  
+GoodNewType1 = NewType("GoodNewType1", list)
 
-GoodNewType2 = NewType("GoodNewType2", GoodNewType1) 
+GoodNewType2 = NewType("GoodNewType2", GoodNewType1)
 
 nt1: GoodNewType1[int] # E: Expected 0 type arguments for `GoodNewType1`, got 1
 
-     "#,
+"#,
 );
 
 testcase!(
@@ -55,17 +55,17 @@ BadNewType2 = NewType("BadNewType2", list[T])  # E: Second argument to NewType c
 BadNewType3 = NewType("BadNewType3", Hashable) # E: Second argument to NewType cannot be a protocol
 
 BadNewType4 = NewType("BadNewType4", Literal[7]) # E: Second argument to NewType is invalid
-     "#,
+"#,
 );
 
 testcase!(
     test_new_type_wrong_arity,
     r#"
-from typing import NewType 
+from typing import NewType
 UserId = NewType("UserId", int, int) # E: Expected 2 positional arguments, got 3
 UserId = NewType("UserId") # E: Missing argument `tp`
 userId = NewType() # E: Missing argument `name` # E: Missing argument `tp`
-     "#,
+"#,
 );
 
 testcase!(
@@ -79,7 +79,7 @@ class TD1(TypedDict):
 BadNewType1 = NewType("BadNewType1", TD1)  # E: Second argument to NewType is invalid
 
 BadNewType2 = NewType("BadNewType2", Any)  # E: Second argument to NewType is invalid
-     "#,
+"#,
 );
 
 testcase!(
@@ -93,7 +93,7 @@ class R:
 
     def test(self, v: V) -> int:
         return v
-     "#,
+"#,
 );
 
 testcase!(
@@ -107,5 +107,5 @@ Bar = NewType("Bar", tuple[int, ...])
 
 Foo((1, 2))  # OK
 Foo((1, 2, 3))  # this shouldn't be allowed
-     "#,
+"#,
 );

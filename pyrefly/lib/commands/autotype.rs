@@ -252,11 +252,11 @@ def foo() -> str:
             r#"
     def is_valid():
         return True
-    "#,
+"#,
             r#"
     def is_valid() -> bool:
         return True
-    "#,
+"#,
         );
         Ok(())
     }
@@ -269,12 +269,12 @@ def foo() -> str:
     def example(a, b, c):
         return c
     example(1, 2, 3)
-    "#,
+"#,
             r#"
     def example(a: int, b: int, c: int):
         return c
     example(1, 2, 3)
-    "#,
+"#,
         );
         Ok(())
     }
@@ -289,14 +289,14 @@ def foo() -> str:
     example(1, 2, 3)
     x = 2
     example("a", "b", x)
-    "#,
+"#,
             r#"
     def example(a: int | str, b: int | str, c: int):
         return c
     example(1, 2, 3)
     x = 2
     example("a", "b", x)
-    "#,
+"#,
         );
         Ok(())
     }
@@ -311,14 +311,14 @@ def foo() -> str:
     example(1, 2, 3)
     x = 2
     example("a", "b", x)
-    "#,
+"#,
             r#"
     def example(a: int | str, b: int | str, c: int | None = None):
         return c
     example(1, 2, 3)
     x = 2
     example("a", "b", x)
-    "#,
+"#,
         );
         Ok(())
     }
@@ -331,12 +331,12 @@ def foo() -> str:
     def example(c = 1):
         return c
     example("a")
-    "#,
+"#,
             r#"
     def example(c: int | str = 1):
         return c
     example("a")
-    "#,
+"#,
         );
         Ok(())
     }
@@ -347,11 +347,11 @@ def foo() -> str:
             r#"
     def example(c):
         c + 1
-    "#,
+"#,
             r#"
     def example(c) -> None:
         c + 1
-    "#,
+"#,
         );
         Ok(())
     }
@@ -363,12 +363,12 @@ def foo() -> str:
     def example(c = None):
         pass
     example(None)
-    "#,
+"#,
             r#"
     def example(c = None) -> None:
         pass
     example(None)
-    "#,
+"#,
         );
         Ok(())
     }
@@ -379,11 +379,11 @@ def foo() -> str:
             r#"
     def foo(a=2) -> None:
         pass
-    "#,
+"#,
             r#"
     def foo(a: int=2) -> None:
         pass
-    "#,
+"#,
         );
         Ok(())
     }
