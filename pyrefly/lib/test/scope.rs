@@ -736,3 +736,19 @@ class C:
             pass
     "#,
 );
+
+// https://github.com/facebook/pyrefly/issues/1197
+testcase!(
+    bug = "call to shadowed eval inside a function should not resolve to an union type",
+    test_shadowed_eval,
+    r#"
+def eval(x: int) -> int:
+    return x
+def calls_eval():
+    reveal_type(eval) # E: revealed type: ((source: Buffer | CodeType | str, /, globals: dict[str, Any] | None = None, locals: Mapping[str, object] | None = None) -> Any) | ((x: int) -> int)
+    eval("string") # E: Argument `Literal['string']` is not assignable to parameter `x` with type `int` in function `eval`
+    eval(42) # should be ok # E: Argument `Literal[42]` is not assignable to parameter `source` with type `Buffer | CodeType | str` in function `eval`
+eval("string") # E: Argument `Literal['string']` is not assignable to parameter `x` with type `int` in function `eval`
+eval(42) # should be ok
+"#,
+);
