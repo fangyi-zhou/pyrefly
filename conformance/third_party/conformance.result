@@ -88,7 +88,9 @@
     "Line 38: Expected 1 errors"
   ],
   "dataclasses_transform_class.py": [],
-  "dataclasses_transform_converter.py": [],
+  "dataclasses_transform_converter.py": [
+    "Line 104: Unexpected errors ['Argument `type[dict]` is not assignable to parameter `converter` with type `(Any) -> dict[str, str]` in function `model_field`']"
+  ],
   "dataclasses_transform_field.py": [],
   "dataclasses_transform_func.py": [],
   "dataclasses_transform_meta.py": [],

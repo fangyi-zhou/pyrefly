@@ -3390,8 +3390,8 @@
     {
       "code": -2,
       "column": 12,
-      "concise_description": "revealed type: (x: list[Unknown], y: list[Unknown]) -> Class8[Unknown]",
-      "description": "revealed type: (x: list[Unknown], y: list[Unknown]) -> Class8[Unknown]",
+      "concise_description": "revealed type: (x: list[@_], y: list[@_]) -> Class8[@_]",
+      "description": "revealed type: (x: list[@_], y: list[@_]) -> Class8[@_]",
       "line": 182,
       "name": "reveal-type",
       "severity": "info",
@@ -3895,6 +3895,17 @@
       "severity": "error",
       "stop_column": 55,
       "stop_line": 49
+    },
+    {
+      "code": -2,
+      "column": 52,
+      "concise_description": "Argument `type[dict]` is not assignable to parameter `converter` with type `(Any) -> dict[str, str]` in function `model_field`",
+      "description": "Argument `type[dict]` is not assignable to parameter `converter` with type `(Any) -> dict[str, str]` in function `model_field`",
+      "line": 104,
+      "name": "bad-argument-type",
+      "severity": "error",
+      "stop_column": 56,
+      "stop_line": 104
     },
     {
       "code": -2,

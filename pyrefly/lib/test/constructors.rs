@@ -701,6 +701,19 @@ assert_type(takes_callable(C, "hello"), C[str])
 );
 
 testcase!(
+    test_new_to_callable_class_level_generics,
+    r#"
+from typing import Generic, TypeVar, assert_type, Callable, Self
+T = TypeVar("T")
+class C(Generic[T]):
+    def __new__(cls, x: T) -> Self: ...
+def takes_callable[V](x: Callable[[V], C[V]], y: V) -> C[V]: ...
+assert_type(takes_callable(C, 42), C[int])
+assert_type(takes_callable(C, "hello"), C[str])
+    "#,
+);
+
+testcase!(
     test_init_class_scoped_typevars_in_self,
     r#"
 from typing import Generic, TypeVar

@@ -235,6 +235,10 @@ impl TArgs {
         &self.0.0
     }
 
+    pub fn tparams_arc(&self) -> Arc<TParams> {
+        self.0.0.dupe()
+    }
+
     pub fn iter_paired(&self) -> impl ExactSizeIterator<Item = (&TParam, &Type)> {
         self.0.0.iter().zip(self.0.1.iter())
     }
@@ -1502,6 +1506,122 @@ impl Type {
                                 signature: new_callable,
                                 metadata: forall.body.metadata,
                             },
+                        })
+                    }
+                });
+                Type::Overload(Overload {
+                    signatures: new_signatures,
+                    metadata: overload.metadata,
+                })
+            }
+            // For other types, return unchanged
+            other => other,
+        }
+    }
+
+    /// Strip the first parameter from a callable type, keeping the return type unchanged.
+    /// Used for converting `__new__` methods to callables.
+    pub fn strip_first_param_for_new(self) -> Type {
+        let mut owner = Owner::new();
+
+        // Helper to transform a callable: remove first param, keep return type
+        let transform_callable = |callable: Callable, owner: &mut Owner<Type>| {
+            if let Some((_, rest)) = callable.split_first_param(owner) {
+                rest
+            } else {
+                callable
+            }
+        };
+
+        match self {
+            Type::Forall(box Forall {
+                tparams,
+                body: Forallable::Function(func),
+            }) => {
+                let new_callable = transform_callable(func.signature, &mut owner);
+                Type::Forall(Box::new(Forall {
+                    tparams,
+                    body: Forallable::Function(Function {
+                        signature: new_callable,
+                        metadata: func.metadata,
+                    }),
+                }))
+            }
+            Type::Function(box func) => {
+                let new_callable = transform_callable(func.signature, &mut owner);
+                Type::Function(Box::new(Function {
+                    signature: new_callable,
+                    metadata: func.metadata,
+                }))
+            }
+            Type::Overload(overload) => {
+                let new_signatures = overload.signatures.mapped(|sig| match sig {
+                    OverloadType::Function(func) => {
+                        let new_callable = transform_callable(func.signature, &mut owner);
+                        OverloadType::Function(Function {
+                            signature: new_callable,
+                            metadata: func.metadata,
+                        })
+                    }
+                    OverloadType::Forall(forall) => {
+                        let new_callable = transform_callable(forall.body.signature, &mut owner);
+                        OverloadType::Forall(Forall {
+                            tparams: forall.tparams,
+                            body: Function {
+                                signature: new_callable,
+                                metadata: forall.body.metadata,
+                            },
+                        })
+                    }
+                });
+                Type::Overload(Overload {
+                    signatures: new_signatures,
+                    metadata: overload.metadata,
+                })
+            }
+            // For other types, return unchanged
+            other => other,
+        }
+    }
+
+    /// Wrap a callable type in a `Forall` with the given type parameters.
+    /// Used when a class method uses class-level type parameters that need to be bound.
+    pub fn wrap_callable_in_forall(self, tparams: Arc<TParams>) -> Type {
+        if tparams.is_empty() {
+            return self;
+        }
+        match self {
+            Type::Function(box func) => Type::Forall(Box::new(Forall {
+                tparams,
+                body: Forallable::Function(func),
+            })),
+            Type::Forall(box Forall {
+                tparams: existing_tparams,
+                body: Forallable::Function(func),
+            }) => {
+                // Prepend class tparams to existing method tparams
+                let mut new_tparams = (*tparams).clone();
+                new_tparams.extend(&existing_tparams);
+                Type::Forall(Box::new(Forall {
+                    tparams: Arc::new(new_tparams),
+                    body: Forallable::Function(func),
+                }))
+            }
+            Type::Overload(overload) => {
+                let new_signatures = overload.signatures.mapped(|sig| match sig {
+                    OverloadType::Function(func) => OverloadType::Forall(Forall {
+                        tparams: tparams.clone(),
+                        body: func,
+                    }),
+                    OverloadType::Forall(Forall {
+                        tparams: existing_tparams,
+                        body: func,
+                    }) => {
+                        let mut new_tparams = (*tparams).clone();
+                        new_tparams.extend(&existing_tparams);
+                        OverloadType::Forall(Forall {
+                            tparams: Arc::new(new_tparams),
+                            body: func,
                         })
                     }
                 });

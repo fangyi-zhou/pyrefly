@@ -61,6 +61,12 @@ impl<'a, Ans: LookupAnswer> TypeOrder<'a, Ans> {
         self.0.has_superclass(got, want)
     }
 
+    /// Create a generic instance of a class with its type parameters as type arguments.
+    /// This preserves type variables (e.g., `instantiate(list)` → `list[T]`).
+    pub fn instantiate(self, cls: &Class) -> Type {
+        self.0.instantiate(cls)
+    }
+
     pub fn as_superclass(self, class: &ClassType, want: &Class) -> Option<ClassType> {
         self.0.as_superclass(class, want)
     }

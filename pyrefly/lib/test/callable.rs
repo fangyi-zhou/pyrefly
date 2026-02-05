@@ -1315,7 +1315,7 @@ def test(p4: Proto4[...], p7: Proto7):
 );
 
 testcase!(
-    bug = "conformance: Constructor to Callable conversion issues with overloads and __new__",
+    bug = "conformance: Constructor to Callable conversion issues with overloads",
     test_constructor_callable_conversion,
     r#"
 from typing import Callable, ParamSpec, TypeVar, Self, assert_type, overload, Generic
@@ -1350,7 +1350,6 @@ class Class8(Generic[T]):
         return super().__new__(cls)
 
 r8 = accepts_callable(Class8)
-# pyrefly incorrectly errors on this - should be OK
-assert_type(r8([""], [""]), Class8[str])  # E: assert_type(Class8[Any], Class8[str]) failed
+assert_type(r8([""], [""]), Class8[str])
 "#,
 );

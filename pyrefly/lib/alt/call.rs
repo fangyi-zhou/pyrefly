@@ -1222,6 +1222,26 @@ impl<'a, Ans: LookupAnswer> AnswersSolver<'a, Ans> {
 
     pub fn constructor_to_callable(&self, cls: &ClassType) -> Type {
         let class_type = cls.clone().to_type();
+        // Check if the targs are type variables (happens when using `instantiate` for generic classes).
+        // If so, we need to wrap the result in Forall with the class's type parameters.
+        let tparams_to_wrap = cls.targs().tparams_arc();
+        let wrap_in_forall = |ty: Type| {
+            if tparams_to_wrap.is_empty() {
+                ty
+            } else {
+                // Only wrap if the targs are the type parameters themselves (i.e., not specialized)
+                let is_unspecialized = cls
+                    .targs()
+                    .iter_paired()
+                    .all(|(tparam, targ)| *targ == tparam.quantified.clone().to_type());
+                if is_unspecialized {
+                    ty.wrap_callable_in_forall(tparams_to_wrap.dupe())
+                } else {
+                    ty
+                }
+            }
+        };
+
         if let Some(metaclass_call_attr_ty) = self.get_metaclass_dunder_call(cls) {
             // If the class has a custom metaclass and the return type of the metaclass's __call__
             // is not a subclass of the current class, use that and ignore __new__ and __init__
@@ -1229,7 +1249,7 @@ impl<'a, Ans: LookupAnswer> AnswersSolver<'a, Ans> {
                 .callable_return_type()
                 .is_some_and(|ret| !self.is_compatible_constructor_return(&ret, cls.class_object()))
             {
-                return metaclass_call_attr_ty;
+                return wrap_in_forall(metaclass_call_attr_ty);
             }
         }
         // Default constructor that takes no args and returns Self.
@@ -1240,15 +1260,14 @@ impl<'a, Ans: LookupAnswer> AnswersSolver<'a, Ans> {
             )))
         };
         // Check the __new__ method and whether it comes from object or has been overridden
-        let (new_attr_ty, overrides_new) = if let Some(t) = self
-            .get_dunder_new(cls)
-            .and_then(|t| self.bind_dunder_new(&t, cls.clone()))
-        {
+        let (new_attr_ty, overrides_new) = if let Some(t) = self.get_dunder_new(cls) {
+            // Strip the cls parameter, keeping the return type
+            let t = t.strip_first_param_for_new();
             if t.callable_return_type()
                 .is_some_and(|ret| !self.is_compatible_constructor_return(&ret, cls.class_object()))
             {
                 // If the return type of __new__ is not a subclass of the current class, use that and ignore __init__
-                return t;
+                return wrap_in_forall(t);
             }
             (t, true)
         } else {
@@ -1262,7 +1281,7 @@ impl<'a, Ans: LookupAnswer> AnswersSolver<'a, Ans> {
         } else {
             (default_constructor(), false)
         };
-        if !overrides_new && overrides_init {
+        let result = if !overrides_new && overrides_init {
             // If `__init__` is overridden and `__new__` is inherited from object, use `__init__`
             init_attr_ty
         } else if overrides_new && !overrides_init {
@@ -1272,7 +1291,8 @@ impl<'a, Ans: LookupAnswer> AnswersSolver<'a, Ans> {
             // If both are overridden, take the union
             // Only if neither are overridden, use the `__new__` and `__init__` from object
             self.unions(vec![new_attr_ty, init_attr_ty])
-        }
+        };
+        wrap_in_forall(result)
     }
 
     pub fn expr_call_infer(
