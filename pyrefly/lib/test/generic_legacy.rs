@@ -590,14 +590,14 @@ class C(typing.Generic[T]):
 );
 
 testcase!(
-    bug = "We should error on out-of-scope typevars",
+    bug = "We should also error on out-of-scope typevars in h",
     test_out_of_scope_old_typevar,
     r#"
 from typing import Any, Callable, TypeVar
 T = TypeVar('T')
 def f() -> Any: ...
 def g():
-    x: T = f()  # this should be an error
+    x: T = f()  # E: Type variable `T` is not bound in this scope
 def h() -> Callable[[T], T]:
     # This should be an error. Note that we treat `[T]() -> ((T) -> T)` as `() -> ([T](T) -> T)`,
     # which makes `T` out-of-scope in the body.
@@ -657,12 +657,11 @@ x2: str = f("hello")
 );
 
 testcase!(
-    bug = "TODO: We should raise an error on list[T] because T is unbounded",
     test_unbounded_typevar,
     r#"
 from typing import TypeVar
 T = TypeVar("T")
-x: list[T]
+x: list[T]  # E: Type variable `T` is not bound in this scope
     "#,
 );
 
@@ -802,7 +801,7 @@ import foo
 # lose track of the `foo.T` one. It probably doesn't matter very much since we at least
 # understand the signature correctly.
 def f(x: foo.T, y: foo.C) -> foo.T:
-    z: foo.T = x  # E: `T` is not assignable to `TypeVar[T]`
+    z: foo.T = x  # E: `T` is not assignable to `TypeVar[T]` # E: Type variable `T` is not bound in this scope
     return z  # E: Returned type `TypeVar[T]` is not assignable to declared return type `T
 assert_type(f(1, foo.C()), int)
 

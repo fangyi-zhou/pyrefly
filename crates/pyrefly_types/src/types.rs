@@ -978,6 +978,45 @@ impl Type {
         self.visit_type_variables(&mut f)
     }
 
+    /// Collect unreplaced references to legacy type variables, skipping types whose
+    /// internals may legitimately contain raw TypeVars. Callable types are skipped because
+    /// `wrap_callable_legacy_typevars` captures their TypeVars later. Quantified and Forall
+    /// types are skipped because their defaults/tparams may reference raw TypeVars.
+    pub fn collect_raw_legacy_type_variables_outside_callable(&self, acc: &mut Vec<Name>) {
+        fn visit(ty: &Type, acc: &mut Vec<Name>) {
+            if matches!(
+                ty,
+                Type::Callable(_) | Type::Quantified(_) | Type::Forall(_)
+            ) {
+                return;
+            }
+            if ty.is_raw_legacy_type_variable() {
+                let name = match TypeVariable::new(ty) {
+                    Some(TypeVariable::LegacyTypeVar(t)) => t.qname().id(),
+                    Some(TypeVariable::LegacyTypeVarTuple(t)) => t.qname().id(),
+                    Some(TypeVariable::LegacyParamSpec(p)) => p.qname().id(),
+                    _ => return,
+                };
+                acc.push(name.clone());
+                return;
+            }
+            match ty {
+                Type::ClassType(cls) => {
+                    for targ in cls.targs().as_slice().iter() {
+                        visit(targ, acc);
+                    }
+                }
+                Type::TypedDict(TypedDict::TypedDict(td)) => {
+                    for targ in td.targs().as_slice().iter() {
+                        visit(targ, acc);
+                    }
+                }
+                _ => ty.recurse(&mut |ty| visit(ty, acc)),
+            }
+        }
+        visit(self, acc);
+    }
+
     /// Transform unreplaced references to legacy type variables. Note that references to in-scope
     /// legacy type variables in functions and classes are replaced with Quantified, so unreplaced
     /// references only appear in cases like a TypeVar definition or an out-of-scope type variable.

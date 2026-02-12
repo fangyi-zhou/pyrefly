@@ -5030,6 +5030,25 @@ impl<'a, Ans: LookupAnswer> AnswersSolver<'a, Ans> {
                 );
             }
         }
+        // Check for out-of-scope legacy type variables in annotation contexts. In-scope
+        // legacy type variables are replaced with Quantified during binding, so remaining
+        // raw references indicate out-of-scope usage. We skip Callable subtypes because
+        // wrap_callable_legacy_typevars captures their TypeVars later.
+        if matches!(
+            type_form_context,
+            TypeFormContext::VarAnnotation(_) | TypeFormContext::ClassVarAnnotation
+        ) {
+            let mut names = Vec::new();
+            ty.collect_raw_legacy_type_variables_outside_callable(&mut names);
+            for name in &names {
+                self.error(
+                    errors,
+                    range,
+                    ErrorInfo::Kind(ErrorKind::InvalidTypeVar),
+                    format!("Type variable `{name}` is not bound in this scope"),
+                );
+            }
+        }
         if type_form_context == TypeFormContext::TypeVarConstraint && ty.contains_type_variable() {
             return self.error(
                 errors,
