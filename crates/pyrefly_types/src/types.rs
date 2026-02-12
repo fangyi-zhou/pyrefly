@@ -990,29 +990,22 @@ impl Type {
             ) {
                 return;
             }
-            if ty.is_raw_legacy_type_variable() {
-                let name = match TypeVariable::new(ty) {
-                    Some(TypeVariable::LegacyTypeVar(t)) => t.qname().id(),
-                    Some(TypeVariable::LegacyTypeVarTuple(t)) => t.qname().id(),
-                    Some(TypeVariable::LegacyParamSpec(p)) => p.qname().id(),
-                    _ => return,
-                };
-                acc.push(name.clone());
-                return;
-            }
-            match ty {
-                Type::ClassType(cls) => {
-                    for targ in cls.targs().as_slice().iter() {
-                        visit(targ, acc);
-                    }
+            match TypeVariable::new(ty) {
+                Some(TypeVariable::LegacyTypeVar(t)) => {
+                    acc.push(t.qname().id().clone());
+                    return;
                 }
-                Type::TypedDict(TypedDict::TypedDict(td)) => {
-                    for targ in td.targs().as_slice().iter() {
-                        visit(targ, acc);
-                    }
+                Some(TypeVariable::LegacyTypeVarTuple(t)) => {
+                    acc.push(t.qname().id().clone());
+                    return;
                 }
-                _ => ty.recurse(&mut |ty| visit(ty, acc)),
+                Some(TypeVariable::LegacyParamSpec(p)) => {
+                    acc.push(p.qname().id().clone());
+                    return;
+                }
+                _ => {}
             }
+            ty.recurse(&mut |ty| visit(ty, acc));
         }
         visit(self, acc);
     }
