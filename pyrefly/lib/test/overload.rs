@@ -397,6 +397,26 @@ qux: Callable[[int | str], int] = foo  # E: not assignable
 );
 
 testcase!(
+    bug = "Overload passed through a generic Callable should preserve the overloaded type, and not resolve to the first overload",
+    test_overload_through_generic_callable,
+    r#"
+from typing import Callable, overload, reveal_type
+
+@overload
+def foo(x: int) -> int: ...
+@overload
+def foo(x: str) -> str: ...
+def foo(x: int | str) -> int | str: ...
+
+def copy[**A, B](c: Callable[A, B]) -> Callable[A, B]: ...
+
+foo_copy = copy(foo)
+assert_type(foo_copy, Callable[[int], int]) # This should be a overloaded type, but currently it resolves to the first overload.
+foo_copy("42")  # E: Argument `Literal['42']` is not assignable to parameter `x` with type `int`
+    "#,
+);
+
+testcase!(
     test_final_decoration_on_top_level_function,
     r#"
 from typing import assert_type, final, overload
